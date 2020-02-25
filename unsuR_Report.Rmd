@@ -49,7 +49,7 @@ set.seed(3141593)
   # gsheet_name <- drive_get("https://docs.google.com/spreadsheets/d/1DWB4rdAmUGggkUN0KtVdtyn6E1gZ9j68QifDD8cn2fY/edit#gid=1146850498")
   # # Download the sheet as 'download_temp', overwrite if present.
   # drive_download(gsheet_name, path = "downloaded_temp", overwrite = TRUE)
-
+  # 
 
 ```
   
@@ -182,7 +182,7 @@ colnames(FRQ_mean) <- c("LEF-A","LEF-B","LEF-C")
     n_scens = n_scens,
     n_perms = n_perms,
     prb = FRQ_mean$`LEF-A`,
-    mn = gEstimates$`Plan A Loss Magnitude (LM) Lower Bound`,
+    mn =  gEstimates$`Plan A Loss Magnitude (LM) Lower Bound`,
     ml = gEstimates$`Plan A Loss Magnitude (LM) Most Likely`,
     mx = gEstimates$`Plan A Loss Magnitude (LM) Upper Bound`,
     out_var = sim_output_A)
@@ -644,11 +644,13 @@ An annotated review of the scientific literature supporting each component of th
 Scope definition, estimate parameters and commentary are collected using a format comfortable to most users, a spreadsheet. A [companion spreadsheet](https://docs.google.com/spreadsheets/d/1DWB4rdAmUGggkUN0KtVdtyn6E1gZ9j68QifDD8cn2fY/edit?usp=sharing) is provided with this tool which is interoperable with major spreadsheet rendering software such as Microsoft Office Excel and Google Sheets. The only variable that needs to be entered into this tool is the address or filepath to the [companion spreadsheet](https://docs.google.com/spreadsheets/d/1DWB4rdAmUGggkUN0KtVdtyn6E1gZ9j68QifDD8cn2fY/edit?usp=sharing) containing the scope components, estimate parameters, and desired commentary.
 
 ![](companion_spreadsheet_Google.png)
+
 *[companion spreadsheet](https://docs.google.com/spreadsheets/d/1DWB4rdAmUGggkUN0KtVdtyn6E1gZ9j68QifDD8cn2fY/edit?usp=sharing) opened in Google Sheets.*
 
 
 
 ![](companion_spreadsheet_Microsoft.png)
+
 *[companion spreadsheet](https://docs.google.com/spreadsheets/d/1DWB4rdAmUGggkUN0KtVdtyn6E1gZ9j68QifDD8cn2fY/edit?usp=sharing) opened in Microsoft Excel.*
 
 
@@ -694,7 +696,8 @@ This risk assessment tool facilitates the comparison of different combinations o
 After controls have been entered as column headers under "Controls" the check boxes are used to indicate which loss scenarios that control effects.
 
 ![](control_droids.png)
-*e.g. The Droid restraining bolt is an applicable control to the Threat Community entries that contain "droid".*
+
+*e.g. The "Malware scans nightly" control is an applicable control to the Threat Community entries that contain "malicious software".*
 
 
 **Simulation**
@@ -717,13 +720,13 @@ The resulting approximating dataset is then analyzed using appropriate statistic
 
 **Reporting / Communication**
 
-Conclusions and recommendations may be communicated alone or alongside visuals by entering the desired text into the Commentary tab of the spreadsheet.
+Background and scope may be communicated alone or alongside visuals by entering the desired text into the respective sections in the Commentary tab of the spreadsheet.
 
 ![](commentary_tab.png)
 
+After analysis has concluded, conclusions and recommendations may also be communicated alone or alongside visuals by entering the desired text into the respective sections of the Commentary tab of the companion spreadsheet.
 
-
-This article uses material from the “Death Star plans”, "Geonosian", "Orson_Callan_Krennic", and "Galen Walton Erso" articles on the [Star Wars wiki at Fandom](https://starwars.fandom.com/wiki/Main_Page) and is licensed under the Creative Commons Attribution-Share Alike License.
+![](commentary_tab2.png)
 
 
 Col2
@@ -733,8 +736,6 @@ Col2
 Executive Summary {.storyboard}
 =====================================
 
-This article uses material from the “Death Star plans”, "Geonosian", "Orson_Callan_Krennic", and "Galen Walton Erso" articles on the [Star Wars wiki at Fandom](https://starwars.fandom.com/wiki/Main_Page) and is licensed under the Creative Commons Attribution-Share Alike License.
-
 ### **Background** {data-commentary-width=500}
 
 ![](graph(1).png)
@@ -742,7 +743,7 @@ This article uses material from the “Death Star plans”, "Geonosian", "Orson_
 ***
 
 ```{r background} 
-gCommentaryF$Background
+as.character(gCommentaryF$Background)
 ```
 
 ### **Scope** {data-commentary-width=500}
@@ -765,21 +766,21 @@ kable(gScope, format = "html", caption = "Scope Table") %>%
 ### **Recommendation**   {data-commentary-width=500}
 
 ```{r recommendation}
-gCommentaryF$Recommendation
+as.character(gCommentaryF$Recommendation)
 ```
 
 
 ### **Next Steps** {data-commentary-width=500}
 
 ```{r next_steps}
-gCommentaryF$`Next Steps`
+as.character(gCommentaryF$`Next Steps`)
 ```
 
 
 Analysis {.storyboard}
 =====================================
 
-### **Projection**  The net value after factoring in costs, benefits, losses, and mitigation costs over 1 year, 3 year, and 5 years. {data-commentary-width=800}
+### **Projection**  The net value after factoring in costs, benefits, losses, and mitigation costs over 1 year, 2 year, and 3 years. {data-commentary-width=800}
 
 **Plan A Expected**
 
@@ -816,7 +817,7 @@ ggplot() +
   geom_hline(aes(yintercept = 0))+
   labs(
       title="Expected Net Value",
-      subtitle = "Benefits minus Costs,Losses,Mitigation Costs, and Prevented Losses)",
+      subtitle = "Benefits minus Costs, Losses, Mitigation Costs, and Prevented Losses)",
       y = "Net Value")+
   scale_fill_viridis(discrete=TRUE)+
   scale_color_viridis(discrete=TRUE)
@@ -826,7 +827,7 @@ ggplot() +
 ***
 
 ```{r projection}
-gCommentaryF$Projection
+as.character(gCommentaryF$Projection)
 ```
 
 ### **Benefits**  Parameters provided by experts to approximate benefits of this project {data-commentary-width=700}
@@ -860,9 +861,9 @@ kable(derp, format = "html", caption = "Scenarios Table") %>%
 ```
 
 ***
-
-- nn scenarios were generated by exhausting...
-- nn were disregarded.
+```{r next_steps_com}
+as.character(gCommentaryF$`Next Steps`)
+```
 
 ### ECDF {data-commentary-width=500}
 
