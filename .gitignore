@@ -37,7 +37,9 @@ vignettes/*.pdf
 
 # R Environment Variables
 .Renviron
+*.Renviron
 
 # Custom
-.xlsx
-logo.png
+*.xlsx
+*.ini
+src/*.ini
