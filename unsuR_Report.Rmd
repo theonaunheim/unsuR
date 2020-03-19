@@ -30,45 +30,49 @@ library(ggbeeswarm)
 library(kableExtra)
 library(leaflet)
 
+# Activate any custom functions/modules source
 source("src/rpert.R")
 source("src/monterlo.R")
-set.seed(3141593)
+source("src/QRAR_Combos_v2-Paste.R")
 
 # If having Pandoc errors you may need to create a file that explicitly tells R where to launch from. This will happen if you have a weird install or are using a virtual workstation etc.
-# Sys.getenv('R_USER')
-# .Renviron file in H:/ and included in it the single entry R_USER=H:/
+  # Sys.getenv('R_USER')
+  # .Renviron file in H:/ and included in it the single entry R_USER=H:/
 ```
 
 ```{r parameters, include=FALSE}
-# Activate any custom functions/modules source
-# Set ####
-  # Set number of simulation variations (at least 10,000 recommended)
-  n_perms = 10000
+# Set random number seed for reproducability.
+  set.seed(3141593)
 
-  # drive_auth(email = "cneskey@gmail.com")
-  # drive_user()
-  # # Identify the sheet of interest
-  # gsheet_name <- drive_get("https://docs.google.com/spreadsheets/d/1DWB4rdAmUGggkUN0KtVdtyn6E1gZ9j68QifDD8cn2fY/edit#gid=1146850498")
-  # # Download the sheet as 'download_temp', overwrite if present.
-  # drive_download(gsheet_name, path = "downloaded_temp", overwrite = TRUE)
+# Set number of simulation variations (at least 10,000 recommended).
+  n_perms = 500
 
+# Specify Google account and path to spreadsheet.
+  drive_auth(email = "cneskey@gmail.com")
+  drive_user()
+  sheet_path <- "https://docs.google.com/spreadsheets/d/1RDLRux1y-bMoW3K3WUywImbutzA2ybugpg2pdu6233o/edit#gid=1268813652"
+  gsheet_name <- drive_get(sheet_path)
 
+# Generate combos and load into clipboard.<Do not use for now>
+  # combos(sheet_path)
+
+# Download the sheet as 'download_temp', overwrite if present.
+  drive_download(gsheet_name, path = "downloaded_temp", overwrite = TRUE)
 ```
   
 ```{r preprocessing, include=FALSE}
-# read the "api_stages" sheets into memory.
+# Read the data sheets into memory.
   gEstimates <- read_excel("downloaded_temp.xlsx", sheet = "api_stage", skip = 10)
   gEstimates2 <- read_excel("downloaded_temp.xlsx", sheet = "api_stage_2", skip = 9)
   gScope <- read_excel("downloaded_temp.xlsx", sheet = "Scope", skip = 3)
   gCommentary <- read_excel("downloaded_temp.xlsx", sheet = "Commentary")
   
-# Commentary  
+# Read commentary sheet contents into memory
   gCommentaryH <- gCommentary$Subsection
   gCommentaryF <- t(gCommentary$Commentary)
   colnames(gCommentaryF) <- gCommentaryH
   gCommentaryF <- as.data.frame(gCommentaryF)
   
-# Sim ----
 # Define unique identifier variables
   n_scens = length(na.omit(gEstimates$`UID`))
   n_bens = length(na.omit(gEstimates2$`Benefit UID`))
@@ -173,11 +177,11 @@ sim_output_C_FRQ <- monterlo(
   out_var = sim_output_C_FRQ)
 
 # Load Frequency means into memory
-FRQ_mean <- colMeans(sim_output_A_FRQ)
-FRQ_mean <- cbind(FRQ_mean,colMeans(sim_output_B_FRQ))
-FRQ_mean <- cbind(FRQ_mean,colMeans(sim_output_C_FRQ))
-FRQ_mean <- as.data.frame(FRQ_mean)
-colnames(FRQ_mean) <- c("LEF-A","LEF-B","LEF-C")
+  FRQ_mean <- colMeans(sim_output_A_FRQ)
+  FRQ_mean <- cbind(FRQ_mean,colMeans(sim_output_B_FRQ))
+  FRQ_mean <- cbind(FRQ_mean,colMeans(sim_output_C_FRQ))
+  FRQ_mean <- as.data.frame(FRQ_mean)
+  colnames(FRQ_mean) <- c("LEF-A","LEF-B","LEF-C")
 
 # Simulate Plan A MAGNITUDE & given FREQUENCY simulated in previous step (Monte Carlo)
   sim_output_A <- monterlo(
@@ -241,35 +245,35 @@ colnames(FRQ_mean) <- c("LEF-A","LEF-B","LEF-C")
       out_var = sim_output_C_ICC)
     
     # Simulate Recurring Control Costs
-    # Simulate Plan A recurring CONTROL Costs
-    sim_output_A_RCC <- monterlo(
-      n_scens = n_scens,
-      n_perms = n_perms,
-      prb = rep(1,n_scens),
-      mn = gEstimates$`Plan A Recurring Control Cost Lower Bound`,
-      ml = gEstimates$`Plan A Recurring Control Cost Most Likely`,
-      mx = gEstimates$`Plan A Recurring Control Cost Upper Bound`,
-      out_var = sim_output_A_RCC)
-    
-    # Simulate Plan B recurring CONTROL Costs
-    sim_output_B_RCC <- monterlo(
-      n_scens = n_scens,
-      n_perms = n_perms,
-      prb = rep(1,n_scens),
-      mn = gEstimates$`Plan B Recurring Control Cost Lower Bound`,
-      ml = gEstimates$`Plan B Recurring Control Cost Most Likely`,
-      mx = gEstimates$`Plan B Recurring Control Cost Upper Bound`,
-      out_var = sim_output_B_RCC)
-    
-    # Simulate Plan C recurring CONTROL Costs
-    sim_output_C_RCC <- monterlo(
-      n_scens = n_scens,
-      n_perms = n_perms,
-      prb = rep(1,n_scens),
-      mn = gEstimates$`Plan C Recurring Control Cost Lower Bound`,
-      ml = gEstimates$`Plan C Recurring Control Cost Most Likely`,
-      mx = gEstimates$`Plan C Recurring Control Cost Upper Bound`,
-      out_var = sim_output_C_RCC)
+      # Simulate Plan A recurring CONTROL Costs
+      sim_output_A_RCC <- monterlo(
+        n_scens = n_scens,
+        n_perms = n_perms,
+        prb = rep(1,n_scens),
+        mn = gEstimates$`Plan A Recurring Control Cost Lower Bound`,
+        ml = gEstimates$`Plan A Recurring Control Cost Most Likely`,
+        mx = gEstimates$`Plan A Recurring Control Cost Upper Bound`,
+        out_var = sim_output_A_RCC)
+      
+      # Simulate Plan B recurring CONTROL Costs
+      sim_output_B_RCC <- monterlo(
+        n_scens = n_scens,
+        n_perms = n_perms,
+        prb = rep(1,n_scens),
+        mn = gEstimates$`Plan B Recurring Control Cost Lower Bound`,
+        ml = gEstimates$`Plan B Recurring Control Cost Most Likely`,
+        mx = gEstimates$`Plan B Recurring Control Cost Upper Bound`,
+        out_var = sim_output_B_RCC)
+      
+      # Simulate Plan C recurring CONTROL Costs
+      sim_output_C_RCC <- monterlo(
+        n_scens = n_scens,
+        n_perms = n_perms,
+        prb = rep(1,n_scens),
+        mn = gEstimates$`Plan C Recurring Control Cost Lower Bound`,
+        ml = gEstimates$`Plan C Recurring Control Cost Most Likely`,
+        mx = gEstimates$`Plan C Recurring Control Cost Upper Bound`,
+        out_var = sim_output_C_RCC)
   
     # Simulate Known Benefits
     sim_output_Bens <- monterlo(
@@ -313,39 +317,41 @@ colnames(FRQ_mean) <- c("LEF-A","LEF-B","LEF-C")
 
 # Load the mean of all columns into memory
   # load Loss Magnitude (LM) means into memory
-  risk_mean <- colMeans(sim_output_A)
-  risk_mean <- cbind(risk_mean,colMeans(sim_output_B))
-  risk_mean <- cbind(risk_mean,colMeans(sim_output_C))
-  risk_mean <- as.data.frame(risk_mean)
-  colnames(risk_mean) <- c("PLAN-A","PLAN-B","PLAN-C")
+    risk_mean <- colMeans(sim_output_A)
+    risk_mean <- cbind(risk_mean,colMeans(sim_output_B))
+    risk_mean <- cbind(risk_mean,colMeans(sim_output_C))
+    risk_mean <- as.data.frame(risk_mean)
+    colnames(risk_mean) <- c("PLAN-A","PLAN-B","PLAN-C")
   
   # load Initial control cost (ICC) means into memory
-  control_mean <- colMeans(sim_output_A_ICC)
-  control_mean <- cbind(control_mean,colMeans(sim_output_B_ICC))
-  control_mean <- cbind(control_mean,colMeans(sim_output_C_ICC))
+    control_mean <- colMeans(sim_output_A_ICC)
+    control_mean <- cbind(control_mean,colMeans(sim_output_B_ICC))
+    control_mean <- cbind(control_mean,colMeans(sim_output_C_ICC))
 
   # load recurring control cost (RCC) means into memory
-  control_mean <- cbind(control_mean,colMeans(sim_output_A_RCC))
-  control_mean <- cbind(control_mean,colMeans(sim_output_B_RCC))
-  control_mean <- cbind(control_mean,colMeans(sim_output_C_RCC))
+    control_mean <- cbind(control_mean,colMeans(sim_output_A_RCC))
+    control_mean <- cbind(control_mean,colMeans(sim_output_B_RCC))
+    control_mean <- cbind(control_mean,colMeans(sim_output_C_RCC))
   
   # convert control means object to dataframe and name columns
-  control_mean <- as.data.frame(control_mean)
-  colnames(control_mean) <- c("ICC-A","ICC-B","ICC-C","RCC-A","RCC-B","RCC-C")
+    control_mean <- as.data.frame(control_mean)
+    colnames(control_mean) <- c("ICC-A","ICC-B","ICC-C","RCC-A","RCC-B","RCC-C")
   
   # load Benefit means into memory
-  Benefit_mean <- colMeans(sim_output_Bens)
-  Benefit_mean <- as.data.frame(Benefit_mean)
+    Benefit_mean <- colMeans(sim_output_Bens)
+    Benefit_mean <- as.data.frame(Benefit_mean)
+  
   # eval recurring
-  Benefit_mean <- cbind(Benefit_mean,Benefit_mean*gEstimates2$`Benefits Recurring_Ben`)
-  colnames(Benefit_mean) <- c("Benefit","Recurring_Benefit")
+    Benefit_mean <- cbind(Benefit_mean,Benefit_mean*gEstimates2$`Benefits Recurring_Ben`)
+    colnames(Benefit_mean) <- c("Benefit","Recurring_Benefit")
   
   # load Costs means into memory
-  Cost_mean <- colMeans(sim_output_Costs)
-  Cost_mean <- as.data.frame(Cost_mean)
+    Cost_mean <- colMeans(sim_output_Costs)
+    Cost_mean <- as.data.frame(Cost_mean)
+  
   # eval recurring
-  Cost_mean <- cbind(Cost_mean,Cost_mean*gEstimates2$`Known Costs Recurring Expense`)
-  colnames(Cost_mean) <- c("Cost","Recurring_Cost")
+    Cost_mean <- cbind(Cost_mean,Cost_mean*gEstimates2$`Known Costs Recurring Expense`)
+    colnames(Cost_mean) <- c("Cost","Recurring_Cost")
   
 # Eval ----
   evals <- data.frame()
@@ -409,186 +415,187 @@ colnames(FRQ_mean) <- c("LEF-A","LEF-B","LEF-C")
     Expected_Implementation_Costs_y1 <- sum(Cost_mean$Cost)
     
     # Plan A
-    Expected_Losses_A_y1 <- mean(risk_mean$`PLAN-A`)
-    Expected_Mitigation_Costs_A_y1 <- mean(control_mean$`ICC-A`)
-    Expected_Prevented_Loss_A_y1 <- 0
-    Expected_Net_A_y1 <- mean(NET_A_Year1)
+      Expected_Losses_A_y1 <- mean(risk_mean$`PLAN-A`)
+      Expected_Mitigation_Costs_A_y1 <- mean(control_mean$`ICC-A`)
+      Expected_Prevented_Loss_A_y1 <- 0
+      Expected_Net_A_y1 <- mean(NET_A_Year1)
     
     # Plan B
-    Expected_Losses_B_y1 <- mean(risk_mean$`PLAN-B`)
-    Expected_Mitigation_Costs_B_y1 <- mean(control_mean$`ICC-B`)
-    Expected_Prevented_Loss_B_y1 <- mean(REL_AvB)
-    Expected_Net_B_y1 <- mean(NET_B_Year1)
+      Expected_Losses_B_y1 <- mean(risk_mean$`PLAN-B`)
+      Expected_Mitigation_Costs_B_y1 <- mean(control_mean$`ICC-B`)
+      Expected_Prevented_Loss_B_y1 <- mean(REL_AvB)
+      Expected_Net_B_y1 <- mean(NET_B_Year1)
     
     # Plan C
-    Expected_Losses_C_y1 <- mean(risk_mean$`PLAN-C`)
-    Expected_Mitigation_Costs_C_y1 <- mean(control_mean$`ICC-C`)
-    Expected_Prevented_Loss_C_y1 <- mean(REL_AvC)
-    Expected_Net_C_y1 <- mean(NET_C_Year1)
+      Expected_Losses_C_y1 <- mean(risk_mean$`PLAN-C`)
+      Expected_Mitigation_Costs_C_y1 <- mean(control_mean$`ICC-C`)
+      Expected_Prevented_Loss_C_y1 <- mean(REL_AvC)
+      Expected_Net_C_y1 <- mean(NET_C_Year1)
     
   # Year 2 Expected
-    Expected_Benefits_y2 <- sum(Benefit_mean$Benefit)+sum(Benefit_mean$Recurring_Benefit)
-    Expected_Implementation_Costs_y2 <- sum(Cost_mean$Cost)+sum(Cost_mean$Recurring_Cost)
+      Expected_Benefits_y2 <- sum(Benefit_mean$Benefit)+sum(Benefit_mean$Recurring_Benefit)
+      Expected_Implementation_Costs_y2 <- sum(Cost_mean$Cost)+sum(Cost_mean$Recurring_Cost)
     
     # Plan A
-    Expected_Losses_A_y2 <- mean(risk_mean$`PLAN-A`)*2
-    Expected_Mitigation_Costs_A_y2 <- mean(control_mean$`ICC-A`)+mean(control_mean$`RCC-A`)
-    Expected_Prevented_Loss_A_y2 <- 0
-    Expected_Net_A_y2 <- mean(NET_A_Year2)
+      Expected_Losses_A_y2 <- mean(risk_mean$`PLAN-A`)*2
+      Expected_Mitigation_Costs_A_y2 <- mean(control_mean$`ICC-A`)+mean(control_mean$`RCC-A`)
+      Expected_Prevented_Loss_A_y2 <- 0
+      Expected_Net_A_y2 <- mean(NET_A_Year2)
     
     # Plan B
-    Expected_Losses_B_y2 <- mean(risk_mean$`PLAN-B`)*2
-    Expected_Mitigation_Costs_B_y2 <- mean(control_mean$`ICC-B`)+mean(control_mean$`RCC-B`)
-    Expected_Prevented_Loss_B_y2 <- mean(REL_AvB)*2
-    Expected_Net_B_y2 <- mean(NET_B_Year2)
+      Expected_Losses_B_y2 <- mean(risk_mean$`PLAN-B`)*2
+      Expected_Mitigation_Costs_B_y2 <- mean(control_mean$`ICC-B`)+mean(control_mean$`RCC-B`)
+      Expected_Prevented_Loss_B_y2 <- mean(REL_AvB)*2
+      Expected_Net_B_y2 <- mean(NET_B_Year2)
     
     # Plan C
-    Expected_Losses_C_y2 <- mean(risk_mean$`PLAN-C`)*2
-    Expected_Mitigation_Costs_C_y2 <- mean(control_mean$`ICC-C`)+mean(control_mean$`RCC-C`)
-    Expected_Prevented_Loss_C_y2 <- mean(REL_AvC)*2
-    Expected_Net_C_y2 <- mean(NET_C_Year2)
+      Expected_Losses_C_y2 <- mean(risk_mean$`PLAN-C`)*2
+      Expected_Mitigation_Costs_C_y2 <- mean(control_mean$`ICC-C`)+mean(control_mean$`RCC-C`)
+      Expected_Prevented_Loss_C_y2 <- mean(REL_AvC)*2
+      Expected_Net_C_y2 <- mean(NET_C_Year2)
     
   # Year 3 Expected
-    Expected_Benefits_y3 <- sum(Benefit_mean$Benefit)+sum(Benefit_mean$Recurring_Benefit)*2
-    Expected_Implementation_Costs_y3 <- sum(Cost_mean$Cost)+sum(Cost_mean$Recurring_Cost)*2
+      Expected_Benefits_y3 <- sum(Benefit_mean$Benefit)+sum(Benefit_mean$Recurring_Benefit)*2
+      Expected_Implementation_Costs_y3 <- sum(Cost_mean$Cost)+sum(Cost_mean$Recurring_Cost)*2
     
     # Plan A
-    Expected_Losses_A_y3 <- mean(risk_mean$`PLAN-A`)*3
-    Expected_Mitigation_Costs_A_y3 <- mean(control_mean$`ICC-A`)+mean(control_mean$`RCC-A`)*2
-    Expected_Prevented_Loss_A_y3 <- 0
-    Expected_Net_A_y3 <- mean(NET_A_Year3)
-    
+      Expected_Losses_A_y3 <- mean(risk_mean$`PLAN-A`)*3
+      Expected_Mitigation_Costs_A_y3 <- mean(control_mean$`ICC-A`)+mean(control_mean$`RCC-A`)*2
+      Expected_Prevented_Loss_A_y3 <- 0
+      Expected_Net_A_y3 <- mean(NET_A_Year3)
+      
     # Plan B
-    Expected_Losses_B_y3 <- mean(risk_mean$`PLAN-B`)*3
-    Expected_Mitigation_Costs_B_y3 <- mean(control_mean$`ICC-B`)+mean(control_mean$`RCC-B`)*2
-    Expected_Prevented_Loss_B_y3 <- mean(REL_AvB)*3
-    Expected_Net_B_y3 <- mean(NET_B_Year3)
+      Expected_Losses_B_y3 <- mean(risk_mean$`PLAN-B`)*3
+      Expected_Mitigation_Costs_B_y3 <- mean(control_mean$`ICC-B`)+mean(control_mean$`RCC-B`)*2
+      Expected_Prevented_Loss_B_y3 <- mean(REL_AvB)*3
+      Expected_Net_B_y3 <- mean(NET_B_Year3)
     
     # Plan C
-    Expected_Losses_C_y3 <- mean(risk_mean$`PLAN-C`)*3
-    Expected_Mitigation_Costs_C_y3 <- mean(control_mean$`ICC-C`)+mean(control_mean$`RCC-C`)*2
-    Expected_Prevented_Loss_C_y3 <- mean(REL_AvC)*3
-    Expected_Net_C_y3 <- mean(NET_C_Year3)
-  
+      Expected_Losses_C_y3 <- mean(risk_mean$`PLAN-C`)*3
+      Expected_Mitigation_Costs_C_y3 <- mean(control_mean$`ICC-C`)+mean(control_mean$`RCC-C`)*2
+      Expected_Prevented_Loss_C_y3 <- mean(REL_AvC)*3
+      Expected_Net_C_y3 <- mean(NET_C_Year3)
+    
   # Build forcast tables
   # Plan A 3-year table
-  Plan_A_Expected <- as.data.frame(rbind(
-    Expected_Benefits_y1,
-    Expected_Implementation_Costs_y1,
-    Expected_Losses_A_y1,
-    Expected_Mitigation_Costs_A_y1,
-    Expected_Prevented_Loss_A_y1,
-    Expected_Net_A_y1))
-  Plan_A_Expected$Year_2 <- rbind(
-    Expected_Benefits_y2,
-    Expected_Implementation_Costs_y2,
-    Expected_Losses_A_y2,
-    Expected_Mitigation_Costs_A_y2,
-    Expected_Prevented_Loss_A_y2,
-    Expected_Net_A_y2)
-  Plan_A_Expected$Year_3 <- rbind(
-    Expected_Benefits_y3,
-    Expected_Implementation_Costs_y3,
-    Expected_Losses_A_y3,
-    Expected_Mitigation_Costs_A_y3,
-    Expected_Prevented_Loss_A_y3,
-    Expected_Net_A_y3)
+    Plan_A_Expected <- as.data.frame(rbind(
+      Expected_Benefits_y1,
+      Expected_Implementation_Costs_y1,
+      Expected_Losses_A_y1,
+      Expected_Mitigation_Costs_A_y1,
+      Expected_Prevented_Loss_A_y1,
+      Expected_Net_A_y1))
+    Plan_A_Expected$Year_2 <- rbind(
+      Expected_Benefits_y2,
+      Expected_Implementation_Costs_y2,
+      Expected_Losses_A_y2,
+      Expected_Mitigation_Costs_A_y2,
+      Expected_Prevented_Loss_A_y2,
+      Expected_Net_A_y2)
+    Plan_A_Expected$Year_3 <- rbind(
+      Expected_Benefits_y3,
+      Expected_Implementation_Costs_y3,
+      Expected_Losses_A_y3,
+      Expected_Mitigation_Costs_A_y3,
+      Expected_Prevented_Loss_A_y3,
+      Expected_Net_A_y3)
   
   # Plan B 3-year table
-  Plan_B_Expected <- as.data.frame(rbind(
-    Expected_Benefits_y1,
-    Expected_Implementation_Costs_y1,
-    Expected_Losses_B_y1,
-    Expected_Mitigation_Costs_B_y1,
-    Expected_Prevented_Loss_B_y1,
-    Expected_Net_B_y1))
-  Plan_B_Expected$Year_2 <- rbind(
-    Expected_Benefits_y2,
-    Expected_Implementation_Costs_y2,
-    Expected_Losses_B_y2,
-    Expected_Mitigation_Costs_B_y2,
-    Expected_Prevented_Loss_B_y2,
-    Expected_Net_B_y2)
-  Plan_B_Expected$Year_3 <- rbind(
-    Expected_Benefits_y3,
-    Expected_Implementation_Costs_y3,
-    Expected_Losses_B_y3,
-    Expected_Mitigation_Costs_B_y3,
-    Expected_Prevented_Loss_B_y3,
-    Expected_Net_B_y3)
+    Plan_B_Expected <- as.data.frame(rbind(
+      Expected_Benefits_y1,
+      Expected_Implementation_Costs_y1,
+      Expected_Losses_B_y1,
+      Expected_Mitigation_Costs_B_y1,
+      Expected_Prevented_Loss_B_y1,
+      Expected_Net_B_y1))
+    Plan_B_Expected$Year_2 <- rbind(
+      Expected_Benefits_y2,
+      Expected_Implementation_Costs_y2,
+      Expected_Losses_B_y2,
+      Expected_Mitigation_Costs_B_y2,
+      Expected_Prevented_Loss_B_y2,
+      Expected_Net_B_y2)
+    Plan_B_Expected$Year_3 <- rbind(
+      Expected_Benefits_y3,
+      Expected_Implementation_Costs_y3,
+      Expected_Losses_B_y3,
+      Expected_Mitigation_Costs_B_y3,
+      Expected_Prevented_Loss_B_y3,
+      Expected_Net_B_y3)
   
   # Plan c 3-year table
-  Plan_C_Expected <- as.data.frame(rbind(
-    Expected_Benefits_y1,
-    Expected_Implementation_Costs_y1,
-    Expected_Losses_C_y1,
-    Expected_Mitigation_Costs_C_y1,
-    Expected_Prevented_Loss_C_y1,
-    Expected_Net_C_y1))
-  Plan_C_Expected$Year_2 <- rbind(
-    Expected_Benefits_y2,
-    Expected_Implementation_Costs_y2,
-    Expected_Losses_C_y2,
-    Expected_Mitigation_Costs_C_y2,
-    Expected_Prevented_Loss_C_y2,
-    Expected_Net_C_y2)
-  Plan_C_Expected$Year_3 <- rbind(
-    Expected_Benefits_y3,
-    Expected_Implementation_Costs_y3,
-    Expected_Losses_C_y3,
-    Expected_Mitigation_Costs_C_y3,
-    Expected_Prevented_Loss_C_y3,
-    Expected_Net_C_y3)
+    Plan_C_Expected <- as.data.frame(rbind(
+      Expected_Benefits_y1,
+      Expected_Implementation_Costs_y1,
+      Expected_Losses_C_y1,
+      Expected_Mitigation_Costs_C_y1,
+      Expected_Prevented_Loss_C_y1,
+      Expected_Net_C_y1))
+    Plan_C_Expected$Year_2 <- rbind(
+      Expected_Benefits_y2,
+      Expected_Implementation_Costs_y2,
+      Expected_Losses_C_y2,
+      Expected_Mitigation_Costs_C_y2,
+      Expected_Prevented_Loss_C_y2,
+      Expected_Net_C_y2)
+    Plan_C_Expected$Year_3 <- rbind(
+      Expected_Benefits_y3,
+      Expected_Implementation_Costs_y3,
+      Expected_Losses_C_y3,
+      Expected_Mitigation_Costs_C_y3,
+      Expected_Prevented_Loss_C_y3,
+      Expected_Net_C_y3)
   
   # Name rows and columns
-  row.names(Plan_A_Expected) <- c("Benefits","Costs","Loss","Mitigation Costs","Prevented Loss","Net")
-  colnames(Plan_A_Expected) <- c("Year 1", "Year 2","Year 3")
-  row.names(Plan_B_Expected) <- c("Benefits","Costs","Loss","Mitigation Costs","Prevented Loss","Net")
-  colnames(Plan_B_Expected) <- c("Year 1", "Year 2","Year 3")
-  row.names(Plan_C_Expected) <- c("Benefits","Costs","Loss","Mitigation Costs","Prevented Loss","Net")
-  colnames(Plan_C_Expected) <- c("Year 1", "Year 2","Year 3")
+    row.names(Plan_A_Expected) <- c("Benefits","Costs","Loss","Mitigation Costs","Prevented Loss","Net")
+    colnames(Plan_A_Expected) <- c("Year 1", "Year 2","Year 3")
+    row.names(Plan_B_Expected) <- c("Benefits","Costs","Loss","Mitigation Costs","Prevented Loss","Net")
+    colnames(Plan_B_Expected) <- c("Year 1", "Year 2","Year 3")
+    row.names(Plan_C_Expected) <- c("Benefits","Costs","Loss","Mitigation Costs","Prevented Loss","Net")
+    colnames(Plan_C_Expected) <- c("Year 1", "Year 2","Year 3")
   
 ```
   
 ```{r procesing_for_visuals, include=FALSE}
   #Data Prep for visualisations
   # Density Plot 1
-  df <- t(risk_mean)
-  df.m <- melt(df)
-  colnames(df.m) <- as.character(c("plan","risk","loss"))
-  mu <- ddply(df.m, "plan", summarise, grp.mean=mean(loss))
-  df.m$plan <- factor(df.m$plan, levels = c("PLAN-C", "PLAN-B", "PLAN-A"))
-  mu$plan <- factor(mu$plan, levels = c("PLAN-C", "PLAN-B", "PLAN-A"))
+    df <- t(risk_mean)
+    df.m <- melt(df)
+    colnames(df.m) <- as.character(c("plan","risk","loss"))
+    mu <- ddply(df.m, "plan", summarise, grp.mean=mean(loss))
+    df.m$plan <- factor(df.m$plan, levels = c("PLAN-C", "PLAN-B", "PLAN-A"))
+    mu$plan <- factor(mu$plan, levels = c("PLAN-C", "PLAN-B", "PLAN-A"))
   
   # Density Plot 2 (costs)
-  df2 <- t(Cost_mean)
-  df.m2 <- melt(sim_output_Costs)
-  colnames(df.m2) <- as.character(c("cost_name","cost_amt"))
-  mu2 <- ddply(df.m2, "cost_name", summarise, grp.mean=mean(cost_amt))
-  df.m2$cost_name <- factor(df.m2$cost_name)
-  mu2$cost_name <- factor(mu2$cost_name)
+    df2 <- t(Cost_mean)
+    df.m2 <- melt(sim_output_Costs)
+    colnames(df.m2) <- as.character(c("cost_name","cost_amt"))
+    mu2 <- ddply(df.m2, "cost_name", summarise, grp.mean=mean(cost_amt))
+    df.m2$cost_name <- factor(df.m2$cost_name)
+    mu2$cost_name <- factor(mu2$cost_name)
   
   # Density Plot 3 (bens)
-  df3 <- t(Benefit_mean)
-  df.m3 <- melt(sim_output_Bens)
-  colnames(df.m3) <- as.character(c("ben_name","ben_amt"))
-  mu3 <- ddply(df.m3, "ben_name", summarise, grp.mean=mean(ben_amt))
-  df.m3$ben_name <- factor(df.m3$ben_name)
-  mu3$cost_name <- factor(mu3$ben_name)
+    df3 <- t(Benefit_mean)
+    df.m3 <- melt(sim_output_Bens)
+    colnames(df.m3) <- as.character(c("ben_name","ben_amt"))
+    mu3 <- ddply(df.m3, "ben_name", summarise, grp.mean=mean(ben_amt))
+    df.m3$ben_name <- factor(df.m3$ben_name)
+    mu3$cost_name <- factor(mu3$ben_name)
   
 # For per plan ECDF
-  loss_ecdf <- ddply(df.m, c("plan"), mutate, ecdf = ecdf(loss)(unique(loss))*length(loss))
-  # To invert the per plan ECDF
-  loss_ecdf_2 <- ddply(loss_ecdf, "plan", mutate, ecdf = scale(ecdf,center=min(ecdf),scale=diff(range(ecdf))))
+    loss_ecdf <- ddply(df.m, c("plan"), mutate, ecdf = ecdf(loss)(unique(loss))*length(loss))
+    # To invert the per plan ECDF
+      loss_ecdf_2 <- ddply(loss_ecdf, "plan", mutate, ecdf = scale(ecdf,center=min(ecdf),scale=diff(range(ecdf))))
   
   # Net amounts and graphs
-  Nets <- rbind(Plan_A_Expected[6,], Plan_B_Expected[6,], Plan_C_Expected[6,])
-  row.names(Nets) <- c("PLAN-C", "PLAN-B", "PLAN-A")
-  Netsm <- melt(t(Nets),id = 0)
-  Netsm$value <- as.numeric(Netsm$value)
-  Netsm$value <- dollar(as.numeric(Netsm$value))
-  colnames(Netsm) <- c("Year", "Plan", "Net")
+    Nets <- rbind(Plan_A_Expected[6,], Plan_B_Expected[6,], Plan_C_Expected[6,])
+    row.names(Nets) <- c("PLAN-C", "PLAN-B", "PLAN-A")
+    Netsm <- melt(t(Nets),id = 0)
+    Netsm$value <- as.numeric(Netsm$value)
+    Netsm$value <- dollar(as.numeric(Netsm$value))
+    colnames(Netsm) <- c("Year", "Plan", "Net")
   
+# Define headers of "Scope" sheet.
   colnames(gScope) <- c("Included","Excluded","Included","Excluded","Included","Excluded","Included","Excluded","Included","Excluded")
 ```
 
@@ -687,7 +694,7 @@ To take advantage of a person’s natural Bayesian tendencies, [calibration](htt
 
 **Control Planning**
 
-This risk assessment tool facilitates the comparison of different combinations of controls that may reduce the probability, impact, or uncertainty of loss events. The tool calls the first theortical combination of loss events and controls "Plan-A". Plan-A represents the absense of any controls in order to establish a baseline or "inherent risk". Plan-B is the second combination of controls. This is where analysts may list controls that are in place and additional controls that they are considering implementing. Plan C is where the analyst would enter an alternative set or combination of controls which require comparison.
+This risk assessment tool facilitates the comparison of different combinations of controls that may reduce the probability, impact, or uncertainty of loss events. The tool calls the first theoretical combination of loss events and controls "Plan-A". Plan-A represents the absence of any controls in order to establish a baseline or "inherent risk". Plan-B is the second combination of controls. This is where analysts may list controls that are in place and additional controls that they are considering implementing. Plan C is where the analyst would enter an alternative set or combination of controls which require comparison.
 
 
 
@@ -1096,7 +1103,7 @@ To take advantage of a person’s natural Bayesian tendencies, [calibration](htt
 
 **Control Planning**
 
-This risk assessment tool facilitates the comparison of different combinations of controls that may reduce the probability, impact, or uncertainty of loss events. The tool calls the first theortical combination of loss events and controls "Plan-A". Plan-A represents the absense of any controls in order to establish a baseline or "inherent risk". Plan-B is the second combination of controls. This is where analysts may list controls that are in place and additional controls that they are considering implementing. Plan C is where the analyst would enter an alternative set or combination of controls which require comparison.
+This risk assessment tool facilitates the comparison of different combinations of controls that may reduce the probability, impact, or uncertainty of loss events. The tool calls the first theoretical combination of loss events and controls "Plan-A". Plan-A represents the absence of any controls in order to establish a baseline or "inherent risk". Plan-B is the second combination of controls. This is where analysts may list controls that are in place and additional controls that they are considering implementing. Plan C is where the analyst would enter an alternative set or combination of controls which require comparison.
 
 
 

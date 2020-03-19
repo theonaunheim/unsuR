@@ -1,8 +1,9 @@
 # rpert
 # BetaPERT in R with native R
-# ref: https://www.riskamp.com/beta-pert
-# ..."Here is an implementation of the beta-PERT distribution in R, using the native beta function:"
-# Book: Risk Analysis - A Quantitative Guide, by David Vose (John Wiley & Sons, 2000).
+# Initially inspired by: https://www.riskamp.com/beta-pert
+# Improved upon based on statistical guidance in:
+# "Risk Analysis - A Quantitative Guide" by David Vose (John Wiley & Sons, 2000).
+
 rpert <- function( n, x.min, x.max, x.mode, lambda = 4 ){
   if( x.min > x.max || x.mode > x.max || x.mode < x.min ) stop( "invalid parameters" );
   x.range <- x.max - x.min;
