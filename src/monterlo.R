@@ -1,7 +1,7 @@
 # monterlo
 # Monte carlo simulation framework
 # ref: https://sites.google.com/view/coreyneskey/
-# 
+
 monterlo <- function( n_scens, n_perms, prb, mn,ml,mx, out_var){
   
   for (i in 1:n_scens) {

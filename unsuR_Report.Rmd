@@ -45,12 +45,12 @@ source("src/QRAR_Combos_v2-Paste.R")
   set.seed(3141593)
 
 # Set number of simulation variations (at least 10,000 recommended).
-  n_perms = 500
+  n_perms = 1000
 
 # Specify Google account and path to spreadsheet.
   drive_auth(email = "cneskey@gmail.com")
   drive_user()
-  sheet_path <- "https://docs.google.com/spreadsheets/d/1RDLRux1y-bMoW3K3WUywImbutzA2ybugpg2pdu6233o/edit#gid=1268813652"
+  sheet_path <- "https://docs.google.com/spreadsheets/d/1RDLRux1y-bMoW3K3WUywImbutzA2ybugpg2pdu6233o/edit#gid=2113505539"
   gsheet_name <- drive_get(sheet_path)
 
 # Generate combos and load into clipboard.<Do not use for now>
@@ -556,7 +556,7 @@ sim_output_C_FRQ <- monterlo(
   
 ```
   
-```{r procesing_for_visuals, include=FALSE}
+```{r processing_for_visuals, include=FALSE}
   #Data Prep for visualisations
   # Density Plot 1
     df <- t(risk_mean)
@@ -979,6 +979,18 @@ Swarm...
     scale_y_continuous(labels = dollar_format()) +
     expand_limits(y = c(0,df.m$loss+(df.m$loss*.05))) +
     coord_flip())
+```
+```{r box_plot2}
+# # Horizontal Box Plot
+  ggplotly(ggplot(data = df.m, aes(x=plan, y=loss)) +
+    geom_boxplot(outlier.colour = "black", outlier.shape = 1, color=c("#4b0082","lightseagreen","gold")) +
+    labs(
+      title="Simulated Loss Output",
+      subtitle = "Over a 12 month period",
+      x = "Control Scenarios",
+      y = "Loss") +
+    scale_y_continuous(labels = dollar_format()) +
+    expand_limits(y = c(0,df.m$loss+(df.m$loss*.05))))
 ```
 
 ***
