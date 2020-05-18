@@ -54,10 +54,10 @@ derp$`probability of exceeding` <- 1-derp$ecdf
 
 ```
 
-
+***
 
 ```{r box_plot1}
-# # Horizontal Box Plot
+# # Box Plot
   ggplotly(ggplot(data = df.m, aes(x=plan, y=loss)) +
     geom_boxplot(outlier.colour = "black", outlier.shape = 1, color=c("#4b0082","lightseagreen","gold")) +
     labs(
@@ -66,12 +66,8 @@ derp$`probability of exceeding` <- 1-derp$ecdf
       x = "Control Scenarios",
       y = "Loss") +
     scale_y_continuous(labels = dollar_format()) +
-    expand_limits(y = c(0,df.m$loss+(df.m$loss*.05))) +
-    coord_flip())
+    expand_limits(y = c(0,df.m$loss+(df.m$loss*.05))))
 ```
-
-
-`gCommentaryF$Background`
 
 ### **Scope** {data-commentary-width=500}
 
@@ -478,11 +474,14 @@ Table of Contents to sections here - Todo []
 ```{r ref.label="box_plot1"}
 ```
 
+***
+
 **Scope**
 
 ```{r ref.label="scope_table2"}
 ```
 
+***
 
 **Analysis**
 
@@ -511,44 +510,59 @@ Table of Contents to sections here - Todo []
 ```{r ref.label="plan_c_expected"}
 ```
 
+***
 
 **Benefits**  Parameters provided by experts to approximate benefits of this project
 
 ```{r ref.label="benefits_table"}
 ```
 
+***
+
 **Costs** Parameters provided by experts to approximate the costs of this project.
 
 ```{r ref.label="costs_table"}
 ```
 
+***
+
+Visualizations of the simulated dataset.
 
 ```{r ref.label="ECDF_plot"}
 ```
 
+***
 
 ```{r ref.label="density_plot"}
 ```
 
+***
 
 ```{r ref.label="violin_plot"}
 ```
 
+***
 
 ```{r ref.label="swarm_plot"}
 ```
 
+***
 
 ```{r ref.label="box_plot"}
 ```
 
+***
 
 ```{r ref.label="ridge_plot"}
 ```
 
+***
+
 *Appendix A: Scenarios*
 ```{r ref.label="Scenarios_table"}
 ```
+
+***
 
 *Appendix B: Assessment Methodology*
 
