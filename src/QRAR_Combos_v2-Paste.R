@@ -2,9 +2,11 @@ combos <- function(sheet_path) {
   # Generates scenarios using factors from "Scope" tab of sheet provided.
   
   # Load resources
+    library(purrr)
     library(googledrive)
     library(readxl)
     library(clipr)
+    library(tidyverse) #<- Refine to needed []
     
   # Download data
     fp <- sheet_path
