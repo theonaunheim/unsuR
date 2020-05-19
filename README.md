@@ -5,13 +5,20 @@ Risk assessment is challenging when data is unavailable, hard to obtain, or cost
 To access the demo dashboard, visit [https://cneskey.github.io/unsuR/unsuR_Report.html](https://cneskey.github.io/unsuR/unsuR_Report.html).
 
 How do I make this?
-@ Install R Studio [https://rstudio.com/products/rstudio/#rstudio-desktop](https://rstudio.com/products/rstudio/#rstudio-desktop)
-@ Download and extract this repo.
-@ Run the Report Maker Script
+1. Install R Studio [https://rstudio.com/products/rstudio/#rstudio-desktop](https://rstudio.com/products/rstudio/#rstudio-desktop).
+
+2. Download and extract this repo.
+
+3. Run the Report Maker Script
 
 How do I put in my own data?
-@ Make a copy of the Companion Spreadsheet and enter your FAIR scenario components.
-@ Run the combo generator.
-@ Enter pre-control estimates.
-@ Enter post-control estimates.
-@ Run the Report Maker Script.
+
+1. Make a copy of the Companion Spreadsheet and enter your FAIR scenario components.
+
+2. Run the combo generator.
+
+3. Enter pre-control estimates.
+
+4. Enter post-control estimates.
+
+5. Run the Report Maker Script.
