@@ -13,9 +13,7 @@ How do I make this?
 
 How do I put in my own data?
 
-1. Make a copy of the Companion Spreadsheet https://docs.google.com/spreadsheets/d/1DWB4rdAmUGggkUN0KtVdtyn6E1gZ9j68QifDD8cn2fY/edit#gid=1976081657 and enter your FAIR scenario components.
-
-2. Run the combo generator.
+1. Make a copy of the Companion Spreadsheet https://docs.google.com/spreadsheets/d/1DWB4rdAmUGggkUN0KtVdtyn6E1gZ9j68QifDD8cn2fY/edit#gid=1976081657 and replace the risk scenarios with your own.
 
 3. Enter pre-control estimates.
 
