@@ -7,7 +7,7 @@ To access the demo dashboard, visit [https://cneskey.github.io/unsuR/unsuR_Repor
 How do I make this?
 1. Install R Studio [https://rstudio.com/products/rstudio/#rstudio-desktop](https://rstudio.com/products/rstudio/#rstudio-desktop).
 
-2. Download and extract this repo.
+2. Download and extract this repo[https://github.com/cneskey/unsuR/archive/master.zip].
 
 3. Run the Report Maker Script
 
