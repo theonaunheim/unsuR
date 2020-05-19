@@ -7,13 +7,13 @@ To access the demo dashboard, visit https://cneskey.github.io/unsuR/unsuR_Report
 How do I make this?
 1. Install R Studio https://rstudio.com/products/rstudio/#rstudio-desktop].
 
-2. Download and extract this [repo] (https://github.com/cneskey/unsuR/archive/master.zip).
+2. Download and extract this https://github.com/cneskey/unsuR/archive/master.zip.
 
 3. Run the Report Maker Script
 
 How do I put in my own data?
 
-1. Make a copy of the [Companion Spreadsheet](https://docs.google.com/spreadsheets/d/1DWB4rdAmUGggkUN0KtVdtyn6E1gZ9j68QifDD8cn2fY/edit#gid=1976081657] and enter your FAIR scenario components.
+1. Make a copy of the Companion Spreadsheet https://docs.google.com/spreadsheets/d/1DWB4rdAmUGggkUN0KtVdtyn6E1gZ9j68QifDD8cn2fY/edit#gid=1976081657 and enter your FAIR scenario components.
 
 2. Run the combo generator.
 
