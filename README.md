@@ -5,7 +5,7 @@ Risk assessment is challenging when data is unavailable, hard to obtain, or cost
 To access the demo dashboard, visit https://cneskey.github.io/unsuR/unsuR_Report.html.
 
 How do I make this?
-1. Install R Studio https://rstudio.com/products/rstudio/#rstudio-desktop].
+1. Install R Studio https://rstudio.com/products/rstudio/#rstudio-desktop.
 
 2. Download and extract this https://github.com/cneskey/unsuR/archive/master.zip.
 
