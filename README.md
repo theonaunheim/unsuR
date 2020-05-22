@@ -13,10 +13,18 @@ How do I make this?
 
 How do I put in my own data?
 
-1. Make a copy of the [Companion Spreadsheet](https://docs.google.com/spreadsheets/d/1DWB4rdAmUGggkUN0KtVdtyn6E1gZ9j68QifDD8cn2fY/edit#gid=1976081657) and replace the risk scenarios with your own.
+1. Make a copy of the [Companion Spreadsheet](https://docs.google.com/spreadsheets/d/1DWB4rdAmUGggkUN0KtVdtyn6E1gZ9j68QifDD8cn2fY/edit#gid=1976081657).
 
-3. Enter pre-control estimates.
+2. Replace contents of the "Scope" tab with your own objects within scope of your assessment.
 
-4. Enter post-control estimates.
+3. Enter pre-control estimates in tab "Plan-A Valuation".
+
+4. Replace the controls in tab "Plan-B" with your own.
+
+5. Enter post-control estimates in tab "Plan-B Valuation"
+
+6. Replace the controls in tab "Plan-C" with your own alternative control plan under consideration.
+
+5. Enter post-control estimates in tab "Plan-C Valuation"
 
 5. Run the Report Maker Script.
