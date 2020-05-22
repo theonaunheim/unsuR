@@ -8,6 +8,7 @@ output:
 Author: Corey Neskey, CISSP | cneskey@protonmail.com | https://github.com/cneskey | https://linkedin.com/in/cneskey | @cneskey
 
 ```{r resources, include=FALSE}
+library(clipr)
 source("src/main.r", echo = TRUE)
 
 # If having Pandoc errors you may need to create a file that explicitly tells R where to launch from. This will happen if you have a weird install or are using a virtual workstation etc.
