@@ -580,9 +580,9 @@ loss_ecdf_2 <- ddply(loss_ecdf, "plan", mutate, ecdf = scale(ecdf,center=min(ecd
 Nets <- rbind(Plan_A_Expected[6,], Plan_B_Expected[6,], Plan_C_Expected[6,])
 row.names(Nets) <- c("PLAN-C", "PLAN-B", "PLAN-A")
 Netsm <- melt(t(Nets),id = 0)
+Netsm$col <-  ifelse(Netsm$value>0, TRUE, FALSE)
 Netsm$value <- as.numeric(Netsm$value)
-Netsm$value <- dollar(as.numeric(Netsm$value))
-colnames(Netsm) <- c("Year", "Plan", "Net")
+colnames(Netsm) <- c("Year", "Plan", "Net", "Sign")
 
 # Define headers of "Scope" sheet.
 colnames(gScope) <- c("Included","Excluded","Included","Excluded","Included","Excluded","Included","Excluded","Included","Excluded")

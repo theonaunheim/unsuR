@@ -11,65 +11,72 @@ Author: Corey Neskey, CISSP | cneskey@protonmail.com | https://github.com/cneske
 source("src/main.r", echo = TRUE)
 
 # If having Pandoc errors you may need to create a file that explicitly tells R where to launch from. This will happen if you have a weird install or are using a virtual workstation etc.
-  # Sys.getenv('R_USER')
-  # .Renviron file in H:/ and included in it the single entry R_USER=H:/
+# Sys.getenv('R_USER')
+# .Renviron file in H:/ and included in it the single entry R_USER=H:/
 ```
 
 Sidebar {.sidebar}
 ======================================================================
-**Exective Summary**
+### `r gCommentaryF$Title`
+
+`r gCommentaryF$Authors`
+
+`r gCommentaryF$Date`
+
+
+### **Exective Summary**
 
 ### **Recommendation**
-
 `r gCommentaryF$Recommendation`
 
 ### **Next Steps** 
-
 `r gCommentaryF$'Next Steps'`
 
 Analysis {.storyboard}
 =====================================
 
-### **Overview** {data-commentary-width=700}
+### **Overview** {data-commentary-width=650}
 
-```{r ECDF_plot1}
-  ####
-  # # Inverse Empirical Cumulative Distribution Function (ECDF)
+```{r ECDF_plot}
+# Inverse Empirical Cumulative Distribution Function (ECDF)
 derp <- loss_ecdf_2
 derp[3] <- formattable(mutate_all(derp[3], currency, digits=0))
 derp[4] <- formattable(mutate_all(derp[4], percent, digits=0))
 derp$`probability of exceeding` <- 1-derp$ecdf
 
+ecdf_gg <- ggplot(derp,  mapping = aes(x = loss, y = `probability of exceeding`, colour = plan)) +
+  geom_line()+
+  labs(
+    title="Simulated Loss Output",
+    x = "Loss amount",
+    y = "Probability of exceeding amount")+
+  scale_x_continuous(labels = dollar_format())+
+  scale_y_continuous(labels = percent_format())+
+  scale_fill_viridis(discrete=TRUE)+
+  scale_color_viridis(discrete=TRUE)
 
-  ggplotly(ggplot(derp,  mapping = aes(x = loss, y = `probability of exceeding`, colour = plan)) +
-    geom_line()+
-    labs(
-      title="Simulated Loss Output",
-      x = "Loss amount",
-      y = "Probability of exceeding amount")+
-    scale_x_continuous(labels = dollar_format())+
-    scale_y_continuous(labels = percent_format())+
-    scale_fill_viridis(discrete=TRUE)+
-    scale_color_viridis(discrete=TRUE))
-
+ggplotly(ecdf_gg)
 ```
 
 ***
 
 ```{r box_plot1}
 # # Box Plot
-  ggplotly(ggplot(data = df.m, aes(x=plan, y=loss)) +
-    geom_boxplot(outlier.colour = "black", outlier.shape = 1, color=c("#4b0082","lightseagreen","gold")) +
-    labs(
-      title="Simulated Loss Output",
-      subtitle = "Over a 12 month period",
-      x = "Control Scenarios",
-      y = "Loss") +
-    scale_y_continuous(labels = dollar_format()) +
-    expand_limits(y = c(0,df.m$loss+(df.m$loss*.05))))
+boxplot_gg <- ggplot(data = df.m, aes(x=plan, y=loss)) +
+  geom_boxplot(outlier.colour = "black", outlier.shape = 1,
+               color=c("#4b0082","lightseagreen","gold")) +
+  labs(
+    title="Simulated Loss Output",
+    subtitle = "Over a 12 month period",
+    x = "Control Scenarios",
+    y = "Loss") +
+  scale_y_continuous(labels = dollar_format()) +
+  expand_limits(y = c(0,df.m$loss+(df.m$loss*.05)))
+
+ggplotly(boxplot_gg)
 ```
 
-### **Scope** {data-commentary-width=500}
+### **Scope** {data-commentary-width=200}
 
 ```{r scope_table2}
 options(knitr.kable.NA = '')
@@ -77,15 +84,17 @@ kable(gScope, format = "html", caption = "Scope Table") %>%
   kable_styling(bootstrap_options = "striped",
                 full_width = F) %>%
   add_header_above(c(
-                     "Assets at risk"	= 2,
-                     "Containers/Points of attack"= 2,
-                     "Threat communities"= 2,
-                     "Threat Types"= 2,
-                     "Effects"= 2
-                     ))
+    "Assets at risk"	= 2,
+    "Containers/Points of attack"= 2,
+    "Threat communities"= 2,
+    "Threat Types"= 2,
+    "Effects"= 2
+  ))
 ```
+***
+`r gCommentaryF$Scope`
 
-### **Projection**  The net value after factoring in costs, benefits, losses, and mitigation costs over 1 year, 2 year, and 3 years. {data-commentary-width=800}
+### **Projection**  The net value after factoring in costs, benefits, losses, and mitigation costs over 1 year, 2 year, and 3 years. {data-commentary-width=600}
 
 **Plan A Expected**
 
@@ -95,7 +104,6 @@ row.names(a_exp) <- row.names(Plan_A_Expected)
 a_exp
 ```
 
-
 **Plan B Expected**
 
 ```{r plan_b_expected}
@@ -104,9 +112,8 @@ row.names(b_exp) <- row.names(Plan_B_Expected)
 b_exp
 ```
 
-
 **Plan C Expected**
- 
+
 ```{r plan_c_expected}
 c_exp <- formattable(mutate_all(Plan_C_Expected,dollar))
 row.names(c_exp) <- row.names(Plan_C_Expected)
@@ -116,29 +123,27 @@ c_exp
 ***
 
 ```{r line_plot}
-ggplotly(ggplot() +
+line_gg <- ggplot() +
   geom_line(data=Netsm, aes(x=Year,y=Net,group=Plan,colour=Plan))+
-  geom_point(data=Netsm, aes(x=Year,y=Net,group=Plan,colour=Plan))+
-  geom_hline(aes(yintercept = 0))+
+  geom_point(data=Netsm, aes(x=Year,y=Net,colour=Plan))+
+  geom_hline(yintercept = 0, linetype = 2)+
   labs(
-      title="Expected Net Value",
-      subtitle = "Benefits minus Costs, Losses, Mitigation Costs, and Prevented Losses)",
-      y = "Net Value")+
-  scale_fill_viridis(discrete=TRUE)+
+    title="Expected Net Value",
+    subtitle = "Benefits minus Costs, Losses, Mitigation Costs, and Prevented Losses)",
+    y = "Net Value")+
+  scale_y_continuous(labels = dollar)+
+ scale_fill_viridis(discrete=TRUE)+
   scale_color_viridis(discrete=TRUE)
-)
-
+ggplotly(line_gg)
 ```
-
 ***
 
 `r gCommentaryF$Projection`
 
-### **Benefits**  Parameters provided by experts to approximate benefits of this project {data-commentary-width=700}
+### **Benefits**  Parameters provided by experts to approximate benefits of this project {data-commentary-width=200}
 
 ```{r benefits_table}
 options(knitr.kable.NA = '')
-
 derp <- gEstimates2[,1:8]
 derp[,4:6] <- formattable(mutate_all(derp[,4:6],currency, digits=0,))
 derp[,3] <- formattable(mutate_all(derp[,3],percent, digits=0))
@@ -146,8 +151,10 @@ kable(derp, format = "html", caption = "Benefits Table") %>%
   kable_styling(bootstrap_options = "striped",
                 full_width = F)
 ```
+***
+`r gCommentaryF$Benefits`
 
-### **Costs** Parameters provided by experts to approximate the costs of this project. {data-commentary-width=700}
+### **Costs** Parameters provided by experts to approximate the costs of this project. {data-commentary-width=200}
 
 ```{r costs_table}
 options(knitr.kable.NA = '')
@@ -157,8 +164,10 @@ kable(derp, format = "html", caption = "Costs Table") %>%
   kable_styling(bootstrap_options = "striped",
                 full_width = F)
 ```
+***
+`r gCommentaryF$Costs`
 
-### Scenarios {data-commentary-width=500}
+### Scenarios {data-commentary-width=200}
 ```{r Scenarios_table}
 options(knitr.kable.NA = '')
 derp <- gEstimates[,1:7]
@@ -166,152 +175,127 @@ kable(derp, format = "html", caption = "Scenarios Table") %>%
   kable_styling(bootstrap_options = "striped",
                 full_width = F)
 ```
-
 ***
+`r gCommentaryF$Scenarios`
 
-### ECDF {data-commentary-width=500}
+### ECDF {data-commentary-width=200}
 
-```{r ECDF_plot}
-  ####
-  # # Inverse Empirical Cumulative Distribution Function (ECDF)
-derp <- loss_ecdf_2
-derp[3] <- formattable(mutate_all(derp[3], currency, digits=0))
-derp[4] <- formattable(mutate_all(derp[4], percent, digits=0))
-derp$`probability of exceeding` <- 1-derp$ecdf
-
-
-  ggplotly(ggplot(derp,  mapping = aes(x = loss, y = `probability of exceeding`, colour = plan)) +
-    geom_line()+
-    labs(
-      title="Simulated Loss Output",
-      x = "Loss amount",
-      y = "Probability of exceeding amount")+
-    scale_x_continuous(labels = dollar_format())+
-    scale_y_continuous(labels = percent_format())+
-    scale_fill_viridis(discrete=TRUE)+
-    scale_color_viridis(discrete=TRUE))
+```{r ref.label="ECDF_plot"}
 
 ```
 
 ***
-ECDF...
+`r gCommentaryF$ECDF`
 
-### Density {data-commentary-width=500}
+### Density {data-commentary-width=200}
 
 ```{r density_plot}
-  # # Density Plot
-  ggplotly(ggplot(derp, aes(x=loss, color=plan, fill=plan)) +
-    geom_density(alpha=0.6) +
-    geom_vline(data=mu, aes(xintercept=grp.mean, color=plan),
-               linetype="dashed") +
-    theme_classic() +
-    theme(legend.position="top") +
-    labs(
-      title="Simulated Loss Output",
-      subtitle = "Over a 12 month period",
-      x = "Loss",
-      y = "Density") +
-    scale_x_continuous(labels = dollar_format())+
-    scale_fill_viridis(discrete=TRUE)+
-    scale_color_viridis(discrete=TRUE))
+density_gg <- ggplot(derp, aes(x=loss, color=plan, fill=plan)) +
+  geom_density(alpha=0.6) +
+  geom_vline(data=mu, aes(xintercept=grp.mean, color=plan),
+             linetype="dashed") +
+  theme_classic() +
+  theme(legend.position="top") +
+  labs(
+    title="Simulated Loss Output",
+    subtitle = "Over a 12 month period",
+    x = "Loss",
+    y = "Density") +
+  scale_x_continuous(labels = dollar_format())+
+  scale_fill_viridis(discrete=TRUE)+
+  scale_color_viridis(discrete=TRUE)
 
+ggplotly(density_gg)
 ```
 
 ***
-Density...
+`r gCommentaryF$Density`
 
-### Violin {data-commentary-width=500}
+### Violin {data-commentary-width=200}
 
 ```{r violin_plot}
-# # Vertical Violin Plot
-  ggplotly(ggplot(data = df.m, aes(x=plan, y=loss)) +
-    geom_violin(aes(fill = factor(plan))) +
-    labs(
-      title="Simulated Loss Output",
-      subtitle = "Over a 12 month period",
-      x = "Control Scenarios",
-      y = "Loss") +
-    scale_y_continuous(labels = dollar_format())+
-    scale_fill_viridis(discrete=TRUE)+
-    scale_color_viridis(discrete=TRUE))
+violin_gg <- ggplot(data = df.m, aes(x=plan, y=loss)) +
+  geom_violin(aes(fill = factor(plan))) +
+  labs(
+    title="Simulated Loss Output",
+    subtitle = "Over a 12 month period",
+    x = "Control Scenarios",
+    y = "Loss") +
+  scale_y_continuous(labels = dollar_format())+
+  scale_fill_viridis(discrete=TRUE)+
+  scale_color_viridis(discrete=TRUE)
+
+ggplotly(violin_gg)
 ```
 
 ***
-Violin...
+`r gCommentaryF$Violin`
 
-### Swarm {data-commentary-width=500}
+### Swarm {data-commentary-width=200}
 
 ```{r swarm_plot}
-# # Vertical beeswarm Plot
-  ggplotly(ggplot(data = df.m, aes(x=plan, y=loss,color = factor(plan))) +
-             geom_beeswarm()+
-    labs(
-      title="Simulated Loss Output",
-      subtitle = "Over a 12 month period",
-      x = "Control Scenarios",
-      y = "Loss") +
-    scale_y_continuous(labels = dollar_format())+
-    scale_fill_viridis(discrete=TRUE)+
-    scale_color_viridis(discrete=TRUE))
+swarm_gg <- ggplot(data = df.m, aes(x=plan, y=loss,color = factor(plan))) +
+  geom_beeswarm()+
+  labs(
+    title="Simulated Loss Output",
+    subtitle = "Over a 12 month period",
+    x = "Control Scenarios",
+    y = "Loss") +
+  scale_y_continuous(labels = dollar_format())+
+  scale_fill_viridis(discrete=TRUE)+
+  scale_color_viridis(discrete=TRUE)
+
+ggplotly(swarm_gg)
 ```
 
 ***
-Swarm...
+`r gCommentaryF$Swarm`
 
-### Box {data-commentary-width=500}
+### Box {data-commentary-width=200}
 
 ```{r box_plot}
-# # Horizontal Box Plot
-  ggplotly(ggplot(data = df.m, aes(x=plan, y=loss)) +
-    geom_boxplot(outlier.colour = "black", outlier.shape = 1, color=c("#4b0082","lightseagreen","gold")) +
-    labs(
-      title="Simulated Loss Output",
-      subtitle = "Over a 12 month period",
-      x = "Control Scenarios",
-      y = "Loss") +
-    scale_y_continuous(labels = dollar_format()) +
-    expand_limits(y = c(0,df.m$loss+(df.m$loss*.05))) +
-    coord_flip())
-```
-```{r box_plot2}
-# # Horizontal Box Plot
-  ggplotly(ggplot(data = df.m, aes(x=plan, y=loss)) +
-    geom_boxplot(outlier.colour = "black", outlier.shape = 1, color=c("#4b0082","lightseagreen","gold")) +
-    labs(
-      title="Simulated Loss Output",
-      subtitle = "Over a 12 month period",
-      x = "Control Scenarios",
-      y = "Loss") +
-    scale_y_continuous(labels = dollar_format()) +
-    expand_limits(y = c(0,df.m$loss+(df.m$loss*.05))))
+hbox_gg <- ggplot(data = df.m, aes(x=plan, y=loss)) +
+  geom_boxplot(outlier.colour = "black", outlier.shape = 1, color=c("#4b0082","lightseagreen","gold")) +
+  labs(
+    title="Simulated Loss Output",
+    subtitle = "Over a 12 month period",
+    x = "Control Scenarios",
+    y = "Loss") +
+  scale_y_continuous(labels = dollar_format()) +
+  expand_limits(y = c(0,df.m$loss+(df.m$loss*.05))) +
+  coord_flip()
+
+ggplotly(hbox_gg)
 ```
 
 ***
-Box...
+`r gCommentaryF$Box`
 
-### Ridge {data-commentary-width=500}
+
+### Ridge {data-commentary-width=200}
 
 ```{r ridge_plot}
-# # Horizontal Ridge Density Plot
-  ggplot(df.m, aes(x=loss, y=plan, fill=plan)) +
-    geom_density_ridges(scale = .9, alpha = .8)+
-    geom_vline(data=mu, aes(xintercept=grp.mean, color=plan),
-               linetype="solid", show.legend = F) +
-    labs(
-      caption = "Vertical lines are loss means",
-      title="Simulated Loss Output",
-      subtitle = "Over a 12 month period",
-      x = "Loss",
-      y = "Density") +
-    scale_x_continuous(labels = dollar_format())+
-    scale_fill_viridis(discrete=TRUE) +
-    scale_color_viridis(discrete=TRUE) +
-    theme_ridges( grid = FALSE)
+ridge_gg <- ggplot(df.m, aes(x=loss, y=plan, fill=plan)) +
+  geom_density_ridges(scale = .9, alpha = .8)+
+  geom_vline(data=mu, aes(xintercept=grp.mean, color=plan),
+             linetype="solid", show.legend = F) +
+  labs(
+    caption = "Vertical lines are loss means",
+    title="Simulated Loss Output",
+    subtitle = "Over a 12 month period",
+    x = "Loss",
+    y = "Density") +
+  scale_x_continuous(labels = dollar_format())+
+  scale_fill_viridis(discrete=TRUE) +
+  scale_color_viridis(discrete=TRUE) +
+  theme_ridges(grid = FALSE)
+
+ridge_gg
 ```
 
 ***
+`r gCommentaryF$Ridge`
 
-Ridge
 
 Assessment Methodology
 =====================================
@@ -336,23 +320,23 @@ The taxonomy chosen is based on Open Group's Factor Analysis of Information Risk
 The Open Group is an industry consortium that facilitates business objectives by developing open, vendor-neutral technology standards and certifications.The Open Group published two Open FAIR standards that form the risk taxonomy followed:
 
 
-  - [Open Risk Taxonomy Technical Standard (O-RT)](http://www.opengroup.org/library/C13K). This standard defines a standard taxonomy of terms, definitions, and relationships used in risk analysis.
+- [Open Risk Taxonomy Technical Standard (O-RT)](http://www.opengroup.org/library/C13K). This standard defines a standard taxonomy of terms, definitions, and relationships used in risk analysis.
 
- - [Open Risk Analysis Technical Standard (O-RA)](http://www.opengroup.org/library/C13G). This standard describes process aspects associated with performing effective risk analysis.
- 
- 
+- [Open Risk Analysis Technical Standard (O-RA)](http://www.opengroup.org/library/C13G). This standard describes process aspects associated with performing effective risk analysis.
+
+
 The [FAIR Institute](https://www.fairinstitute.org) maintains publicly available documentation, resources, community events and other modes of promotion, training, and collaboration.
 
 
 
 **Deviations from Standard**
- 
+
 The methodology used for this assessment deviates from published standards where those standards deviate from scientifically rigorous literature that meets the following criteria:
 
- - Academic Journal (not trade journals),
- - Peer-reviewed,
- - Without conflicts of interest by for-profit entities, and
- - Without conflicts of interest by political entities.
+- Academic Journal (not trade journals),
+- Peer-reviewed,
+- Without conflicts of interest by for-profit entities, and
+- Without conflicts of interest by political entities.
 
 An annotated review of the scientific literature supporting each component of this methodology may be found [here](https://sites.google.com/view/coreyneskey/improving-cybersecurity-decision-making-by-reducing-expert-bias).
 
@@ -467,7 +451,7 @@ Table of Contents to sections here - Todo []
 
 **Overview**
 
-```{r ref.label="ECDF_plot1"}
+```{r ref.label="ECDF_plot"}
 ```
 
 
@@ -506,7 +490,7 @@ Table of Contents to sections here - Todo []
 
 
 **Plan C Expected**
- 
+
 ```{r ref.label="plan_c_expected"}
 ```
 
@@ -586,23 +570,23 @@ The taxonomy chosen is based on Open Group's Factor Analysis of Information Risk
 The Open Group is an industry consortium that facilitates business objectives by developing open, vendor-neutral technology standards and certifications.The Open Group published two Open FAIR standards that form the risk taxonomy followed:
 
 
-  - [Open Risk Taxonomy Technical Standard (O-RT)](http://www.opengroup.org/library/C13K). This standard defines a standard taxonomy of terms, definitions, and relationships used in risk analysis.
+- [Open Risk Taxonomy Technical Standard (O-RT)](http://www.opengroup.org/library/C13K). This standard defines a standard taxonomy of terms, definitions, and relationships used in risk analysis.
 
- - [Open Risk Analysis Technical Standard (O-RA)](http://www.opengroup.org/library/C13G). This standard describes process aspects associated with performing effective risk analysis.
- 
- 
+- [Open Risk Analysis Technical Standard (O-RA)](http://www.opengroup.org/library/C13G). This standard describes process aspects associated with performing effective risk analysis.
+
+
 The [FAIR Institute](https://www.fairinstitute.org) maintains publicly available documentation, resources, community events and other modes of promotion, training, and collaboration.
 
 
 
 **Deviations from Standard**
- 
+
 The methodology used for this assessment deviates from published standards where those standards deviate from scientifically rigorous literature that meets the following criteria:
 
- - Academic Journal (not trade journals),
- - Peer-reviewed,
- - Without conflicts of interest by for-profit entities, and
- - Without conflicts of interest by political entities.
+- Academic Journal (not trade journals),
+- Peer-reviewed,
+- Without conflicts of interest by for-profit entities, and
+- Without conflicts of interest by political entities.
 
 An annotated review of the scientific literature supporting each component of this methodology may be found [here](https://sites.google.com/view/coreyneskey/improving-cybersecurity-decision-making-by-reducing-expert-bias).
 
