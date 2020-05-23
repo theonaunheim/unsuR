@@ -1,8 +1,7 @@
 ---
 title: "Risk Assessment Report"
 output: 
-  flexdashboard::flex_dashboard:
-    self_contained: TRUE
+  flexdashboard::flex_dashboard
 ---
 
 Author: Corey Neskey, CISSP | cneskey@protonmail.com | https://github.com/cneskey | https://linkedin.com/in/cneskey | @cneskey
@@ -132,7 +131,7 @@ line_gg <- ggplot() +
     subtitle = "Benefits minus Costs, Losses, Mitigation Costs, and Prevented Losses)",
     y = "Net Value")+
   scale_y_continuous(labels = dollar)+
- scale_fill_viridis(discrete=TRUE)+
+  scale_fill_viridis(discrete=TRUE)+
   scale_color_viridis(discrete=TRUE)
 ggplotly(line_gg)
 ```
@@ -298,11 +297,12 @@ ridge_gg
 
 Journal
 =====================================
-
 ### **Risk Model Journal**
 ```{r journal_table}
 options(knitr.kable.NA = '')
-kable(gJournal, format = "html", caption = "Journal of events related to this particular risk model.") %>%
+kable(gJournal,
+      format = "html",
+      caption = "Journal of events related to this particular risk model.") %>%
   kable_styling(bootstrap_options = "striped",
                 full_width = T)
 ```
@@ -393,7 +393,7 @@ Probability and impact parameters are defined from the integration of data and [
 
 To take advantage of a person’s natural Bayesian tendencies, [calibration](https://sites.google.com/view/coreyneskey/improving-cybersecurity-decision-making-by-reducing-expert-bias#h.p_UeVP7PfPc-Qp) questions and responses take the form of [frequency formats](https://sites.google.com/view/coreyneskey/improving-cybersecurity-decision-making-by-reducing-expert-bias#h.p_WA7BG-Cgc50Q) instead of percentages or fractions.
 
-[Frequency formats](https://sites.google.com/view/coreyneskey/improving-cybersecurity-decision-making-by-reducing-expert-bias#h.p_WA7BG-Cgc50Q) communicate information to experts in a form that more closely resembles the natural sampling observed in animal foraging and neural networks. What is 1% in standard format would be "10 in 100" in frequency format.
+[Frequency formats](https://sites.google.com/view/coreyneskey/improving-cybersecurity-decision-making-by-reducing-expert-bias#h.p_WA7BG-Cgc50Q) communicate information to experts in a form that more closely resembles the natural sampling observed in animal foraging and neural networks. What is 1% in standard format would be "1 in 100" in frequency format.
 
 
 
@@ -552,13 +552,17 @@ Visualizations of the simulated dataset.
 
 ***
 
-*Appendix A: Scenarios*
+*Appendix A: Journal*
+```{r ref.label="journal_table"}
+```
+
+*Appendix B: Scenarios*
 ```{r ref.label="Scenarios_table"}
 ```
 
 ***
 
-*Appendix B: Assessment Methodology*
+*Appendix C: Assessment Methodology*
 
 **Methodology Criteria**
 
@@ -643,7 +647,7 @@ Probability and impact parameters are defined from the integration of data and [
 
 To take advantage of a person’s natural Bayesian tendencies, [calibration](https://sites.google.com/view/coreyneskey/improving-cybersecurity-decision-making-by-reducing-expert-bias#h.p_UeVP7PfPc-Qp) questions and responses take the form of [frequency formats](https://sites.google.com/view/coreyneskey/improving-cybersecurity-decision-making-by-reducing-expert-bias#h.p_WA7BG-Cgc50Q) instead of percentages or fractions.
 
-[Frequency formats](https://sites.google.com/view/coreyneskey/improving-cybersecurity-decision-making-by-reducing-expert-bias#h.p_WA7BG-Cgc50Q) communicate information to experts in a form that more closely resembles the natural sampling observed in animal foraging and neural networks. What is 1% in standard format would be "10 in 100" in frequency format.
+[Frequency formats](https://sites.google.com/view/coreyneskey/improving-cybersecurity-decision-making-by-reducing-expert-bias#h.p_WA7BG-Cgc50Q) communicate information to experts in a form that more closely resembles the natural sampling observed in animal foraging and neural networks. What is 1% in standard format would be "1 in 100" in frequency format.
 
 
 
@@ -698,22 +702,22 @@ Legal
 
 ### **unsuR**
 unsuR is a software package that facilitates quantitative risk analysis and reporting.
- 
-    Copyright (C) 2020  Corey Neskey
 
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
+Copyright (C) 2020  Corey Neskey
 
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
 
-    You should have received a copy of the GNU General Public License
-    along with this program.  If not, see <https://www.gnu.org/licenses/>.
-    
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
 ### **LICENSE**
 
 `r sourcetools::read("LICENSE")`

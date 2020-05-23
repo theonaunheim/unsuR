@@ -589,7 +589,7 @@ loss_ecdf_2 <- ddply(loss_ecdf, "plan", mutate, ecdf = scale(ecdf,center=min(ecd
 
 # Net amounts and graphs
 Nets <- rbind(Plan_A_Expected[6,], Plan_B_Expected[6,], Plan_C_Expected[6,])
-row.names(Nets) <- c("PLAN-C", "PLAN-B", "PLAN-A")
+row.names(Nets) <- c("PLAN-A", "PLAN-B", "PLAN-C")
 Netsm <- melt(t(Nets),id = 0)
 Netsm$col <-  ifelse(Netsm$value>0, TRUE, FALSE)
 Netsm$value <- as.numeric(Netsm$value)
