@@ -296,6 +296,16 @@ ridge_gg
 ***
 `r gCommentaryF$Ridge`
 
+Journal
+=====================================
+
+### **Risk Model Journal**
+```{r journal_table}
+options(knitr.kable.NA = '')
+kable(gJournal, format = "html", caption = "Journal of events related to this particular risk model.") %>%
+  kable_styling(bootstrap_options = "striped",
+                full_width = T)
+```
 
 Assessment Methodology
 =====================================

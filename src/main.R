@@ -71,12 +71,14 @@ gEstimates <- read_excel("downloaded_temp.xlsx", sheet = "api_stage", skip = 10)
 gEstimates2 <- read_excel("downloaded_temp.xlsx", sheet = "api_stage_2", skip = 9)
 gScope <- read_excel("downloaded_temp.xlsx", sheet = "Scope", skip = 3)
 gCommentary <- read_excel("downloaded_temp.xlsx", sheet = "Commentary")
+gJournal <- read_excel("downloaded_temp.xlsx", sheet = "Journal")
 
 # Read commentary sheet contents into memory
 gCommentaryH <- gCommentary$Subsection
 gCommentaryF <- t(gCommentary$Commentary)
 colnames(gCommentaryF) <- gCommentaryH
 gCommentaryF <- as.data.frame(gCommentaryF)
+# gJournalF <- as.data.frame(gJournal)
 
 # Define unique identifier variables
 n_scens = length(na.omit(gEstimates$`UID`))
