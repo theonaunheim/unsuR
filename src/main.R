@@ -19,9 +19,9 @@ library(leaflet)
 library(clipr)
 
 # Load source into memory
-source("src/rpert.R")
-source("src/monterlo.R")
-source("src/QRAR_Combos_v2-Paste.R")
+source("rpert.R")
+source("monterlo.R")
+source("QRAR_Combos_v2-Paste.R")
 
 
 email <- rstudioapi::showPrompt(
@@ -92,62 +92,54 @@ sim_output_C_FRQ <- data.frame()
 sim_output_A <- data.frame()
 sim_output_B <- data.frame()
 sim_output_C <- data.frame()
-sim_output_A_ICC <- data.frame()
+
 sim_output_B_ICC <- data.frame()
 sim_output_C_ICC <- data.frame()
-sim_output_A_RCC <- data.frame()
+
 sim_output_B_RCC <- data.frame()
 sim_output_C_RCC <- data.frame()
+
 sim_output_Bens <- data.frame()
 sim_output_Costs <- data.frame()
 
 # Convert estimates from Frequency Formats to decimal / percentage ----
 # Plan A
 freq_form <- gEstimates$`Plan A Loss Event Frequency (LEF) Lower Bound`
-freq_form <- str_split(freq_form, " in ", n=2, simplify = TRUE)
-perc_form <- as.numeric(freq_form[,1])/as.numeric(freq_form[,2])
+perc_form <- 1/as.numeric(freq_form)
 gEstimates$`Plan A Loss Event Frequency (LEF) Lower Bound` <- perc_form
 
 freq_form <- gEstimates$`Plan A Loss Event Frequency (LEF) Most Likely`
-freq_form <- str_split(freq_form, " in ", n=2, simplify = TRUE)
-perc_form <- as.numeric(freq_form[,1])/as.numeric(freq_form[,2])
+perc_form <- 1/as.numeric(freq_form)
 gEstimates$`Plan A Loss Event Frequency (LEF) Most Likely` <- perc_form
 
 freq_form <- gEstimates$`Plan A Loss Event Frequency (LEF) Upper Bound`
-freq_form <- str_split(freq_form, " in ", n=2, simplify = TRUE)
-perc_form <- as.numeric(freq_form[,1])/as.numeric(freq_form[,2])
+perc_form <- 1/as.numeric(freq_form)
 gEstimates$`Plan A Loss Event Frequency (LEF) Upper Bound` <- perc_form
 
 # Plan B
 freq_form <- gEstimates$`Plan B Loss Event Frequency (LEF) Lower Bound`
-freq_form <- str_split(freq_form, " in ", n=2, simplify = TRUE)
-perc_form <- as.numeric(freq_form[,1])/as.numeric(freq_form[,2])
+perc_form <- 1/as.numeric(freq_form)
 gEstimates$`Plan B Loss Event Frequency (LEF) Lower Bound` <- perc_form
 
 freq_form <- gEstimates$`Plan B Loss Event Frequency (LEF) Most Likely`
-freq_form <- str_split(freq_form, " in ", n=2, simplify = TRUE)
-perc_form <- as.numeric(freq_form[,1])/as.numeric(freq_form[,2])
+perc_form <- 1/as.numeric(freq_form)
 gEstimates$`Plan B Loss Event Frequency (LEF) Most Likely` <- perc_form
 
 freq_form <- gEstimates$`Plan B Loss Event Frequency (LEF) Upper Bound`
-freq_form <- str_split(freq_form, " in ", n=2, simplify = TRUE)
-perc_form <- as.numeric(freq_form[,1])/as.numeric(freq_form[,2])
+perc_form <- 1/as.numeric(freq_form)
 gEstimates$`Plan B Loss Event Frequency (LEF) Upper Bound` <- perc_form
 
 # Plan C
 freq_form <- gEstimates$`Plan C Loss Event Frequency (LEF) Lower Bound`
-freq_form <- str_split(freq_form, " in ", n=2, simplify = TRUE)
-perc_form <- as.numeric(freq_form[,1])/as.numeric(freq_form[,2])
+perc_form <- 1/as.numeric(freq_form)
 gEstimates$`Plan C Loss Event Frequency (LEF) Lower Bound` <- perc_form
 
 freq_form <- gEstimates$`Plan C Loss Event Frequency (LEF) Most Likely`
-freq_form <- str_split(freq_form, " in ", n=2, simplify = TRUE)
-perc_form <- as.numeric(freq_form[,1])/as.numeric(freq_form[,2])
+perc_form <- 1/as.numeric(freq_form)
 gEstimates$`Plan C Loss Event Frequency (LEF) Most Likely` <- perc_form
 
 freq_form <- gEstimates$`Plan C Loss Event Frequency (LEF) Upper Bound`
-freq_form <- str_split(freq_form, " in ", n=2, simplify = TRUE)
-perc_form <- as.numeric(freq_form[,1])/as.numeric(freq_form[,2])
+perc_form <- 1/as.numeric(freq_form)
 gEstimates$`Plan C Loss Event Frequency (LEF) Upper Bound` <- perc_form
 
 # Simulate Plan A FREQUENCY (Monte Carlo)
@@ -218,16 +210,6 @@ sim_output_C <- monterlo(
   out_var = sim_output_C)
 
 # Simulate Initial Control Costs
-# Simulate Plan A initial CONTROL Costs
-sim_output_A_ICC <- monterlo(
-  n_scens = n_scens,
-  n_perms = n_perms,
-  prb = rep(1,n_scens),
-  mn = gEstimates$`Plan A Initial Control Cost Lower Bound`,
-  ml = gEstimates$`Plan A Initial Control Cost Most Likely`,
-  mx = gEstimates$`Plan A Initial Control Cost Upper Bound`,
-  out_var = sim_output_A_ICC)
-
 # Simulate Plan B  initial CONTROL Costs
 sim_output_B_ICC <- monterlo(
   n_scens = n_scens,
@@ -249,16 +231,6 @@ sim_output_C_ICC <- monterlo(
   out_var = sim_output_C_ICC)
 
 # Simulate Recurring Control Costs
-# Simulate Plan A recurring CONTROL Costs
-sim_output_A_RCC <- monterlo(
-  n_scens = n_scens,
-  n_perms = n_perms,
-  prb = rep(1,n_scens),
-  mn = gEstimates$`Plan A Recurring Control Cost Lower Bound`,
-  ml = gEstimates$`Plan A Recurring Control Cost Most Likely`,
-  mx = gEstimates$`Plan A Recurring Control Cost Upper Bound`,
-  out_var = sim_output_A_RCC)
-
 # Simulate Plan B recurring CONTROL Costs
 sim_output_B_RCC <- monterlo(
   n_scens = n_scens,
@@ -304,16 +276,18 @@ sim_output_Costs <- monterlo(
 colnames(sim_output_A) <- as.character(paste("Risk-",1:n_scens,sep = ""))
 colnames(sim_output_B) <- as.character(paste("Risk-",1:n_scens,sep = ""))
 colnames(sim_output_C) <- as.character(paste("Risk-",1:n_scens,sep = ""))
+
 # headers for initial control cost outputs
-colnames(sim_output_A_ICC) <- as.character(paste("Risk-",1:n_scens,sep = ""))
 colnames(sim_output_B_ICC) <- as.character(paste("Risk-",1:n_scens,sep = ""))
 colnames(sim_output_C_ICC) <- as.character(paste("Risk-",1:n_scens,sep = ""))
+
 # headers for recurring control cost outputs
-colnames(sim_output_A_RCC) <- as.character(paste("Risk-",1:n_scens,sep = ""))
 colnames(sim_output_B_RCC) <- as.character(paste("Risk-",1:n_scens,sep = ""))
 colnames(sim_output_C_RCC) <- as.character(paste("Risk-",1:n_scens,sep = ""))
+
 # headers for benefit outputs
 colnames(sim_output_Bens) <- as.character(paste("benefit-",1:n_bens,sep = ""))
+
 # headers for benefit outputs
 colnames(sim_output_Costs) <- as.character(paste("cost-",1:n_costs,sep = ""))
 
@@ -326,18 +300,16 @@ risk_mean <- as.data.frame(risk_mean)
 colnames(risk_mean) <- c("PLAN-A","PLAN-B","PLAN-C")
 
 # load Initial control cost (ICC) means into memory
-control_mean <- colMeans(sim_output_A_ICC)
-control_mean <- cbind(control_mean,colMeans(sim_output_B_ICC))
+control_mean <- colMeans(sim_output_B_ICC)
 control_mean <- cbind(control_mean,colMeans(sim_output_C_ICC))
 
 # load recurring control cost (RCC) means into memory
-control_mean <- cbind(control_mean,colMeans(sim_output_A_RCC))
 control_mean <- cbind(control_mean,colMeans(sim_output_B_RCC))
 control_mean <- cbind(control_mean,colMeans(sim_output_C_RCC))
 
 # convert control means object to dataframe and name columns
 control_mean <- as.data.frame(control_mean)
-colnames(control_mean) <- c("ICC-A","ICC-B","ICC-C","RCC-A","RCC-B","RCC-C")
+colnames(control_mean) <- c("ICC-B","ICC-C","RCC-B","RCC-C")
 
 # load Benefit means into memory
 Benefit_mean <- colMeans(sim_output_Bens)
@@ -385,7 +357,7 @@ NET_C_Year2 <- (((sum(Benefit_mean$Benefit)+sum(Benefit_mean$Benefit_Recurring))
 
 # Year 3
 # A: (Benefit+Benefit_recurring*2)-(Cost_initial+Cost_recurring*2)-Loss_magn*3-Ctrl_Cost_init)-Ctrl_Cost_recurring*2
-NET_A_Year3 <- (((sum(Benefit_mean$Benefit)+sum(Benefit_mean$Benefit_Recurring*2)) - (sum(Cost_mean$Cost-sum(Cost_mean$Cost_Recurring*2))) - risk_mean$`PLAN-A`*3 - control_mean$`ICC-A`)) - control_mean$`RCC-A`*2
+NET_A_Year3 <- (((sum(Benefit_mean$Benefit)+sum(Benefit_mean$Benefit_Recurring*2)) - (sum(Cost_mean$Cost-sum(Cost_mean$Cost_Recurring*2))) - risk_mean$`PLAN-A`*3 - 0)) - 0
 
 # B: (Benefit+Benefit_recurring*2)-(Cost_initial+Cost_recurring*2)-Loss_magn*3-Ctrl_Cost_init+ReductionEL*3)-Ctrl_Cost_recurring*2
 NET_B_Year3 <- (((sum(Benefit_mean$Benefit)+sum(Benefit_mean$Benefit_Recurring*2)) - (sum(Cost_mean$Cost-sum(Cost_mean$Cost_Recurring*2))) - risk_mean$`PLAN-A`*3 - control_mean$`ICC-B` + REL_AvB*3)) - control_mean$`RCC-B`*2
@@ -418,7 +390,6 @@ Expected_Implementation_Costs_y1 <- sum(Cost_mean$Cost)
 
 # Plan A
 Expected_Losses_A_y1 <- mean(risk_mean$`PLAN-A`)
-Expected_Mitigation_Costs_A_y1 <- mean(control_mean$`ICC-A`)
 Expected_Prevented_Loss_A_y1 <- 0
 Expected_Net_A_y1 <- mean(NET_A_Year1)
 
@@ -440,7 +411,6 @@ Expected_Implementation_Costs_y2 <- sum(Cost_mean$Cost)+sum(Cost_mean$Recurring_
 
 # Plan A
 Expected_Losses_A_y2 <- mean(risk_mean$`PLAN-A`)*2
-Expected_Mitigation_Costs_A_y2 <- mean(control_mean$`ICC-A`)+mean(control_mean$`RCC-A`)
 Expected_Prevented_Loss_A_y2 <- 0
 Expected_Net_A_y2 <- mean(NET_A_Year2)
 
@@ -462,7 +432,6 @@ Expected_Implementation_Costs_y3 <- sum(Cost_mean$Cost)+sum(Cost_mean$Recurring_
 
 # Plan A
 Expected_Losses_A_y3 <- mean(risk_mean$`PLAN-A`)*3
-Expected_Mitigation_Costs_A_y3 <- mean(control_mean$`ICC-A`)+mean(control_mean$`RCC-A`)*2
 Expected_Prevented_Loss_A_y3 <- 0
 Expected_Net_A_y3 <- mean(NET_A_Year3)
 
@@ -477,6 +446,10 @@ Expected_Losses_C_y3 <- mean(risk_mean$`PLAN-C`)*3
 Expected_Mitigation_Costs_C_y3 <- mean(control_mean$`ICC-C`)+mean(control_mean$`RCC-C`)*2
 Expected_Prevented_Loss_C_y3 <- mean(REL_AvC)*3
 Expected_Net_C_y3 <- mean(NET_C_Year3)
+
+Expected_Mitigation_Costs_A_y1 <-0
+Expected_Mitigation_Costs_A_y2 <-0
+Expected_Mitigation_Costs_A_y3 <-0
 
 # Build forcast tables
 # Plan A 3-year table
