@@ -6,14 +6,14 @@ To access the demo dashboard, visit [https://cneskey.github.io/unsuR/output/unsu
 
 To watch an overview of the code presented at satRdays DC 2020, visit [https://youtu.be/VNy9kmiNP7c](https://youtu.be/VNy9kmiNP7c).
 
-To watch an overview of the code presented at user!2020, Coming Soon, [https://user2020.r-project.org/](https://user2020.r-project.org/).
+To watch an overview of the code presented at user!2020 (5 minute video), [https://youtu.be/i0fIRhrSAzE](https://youtu.be/i0fIRhrSAzE).
 
 How do I make this?
 1. Install R Studio [https://rstudio.com/products/rstudio/#rstudio-desktop](https://rstudio.com/products/rstudio/#rstudio-desktop).
 
 2. Download and extract this [https://github.com/cneskey/unsuR/archive/master.zip](https://github.com/cneskey/unsuR/archive/master.zip).
 
-3. Run the Report Maker Script
+3. Open the "unsuR-Report_Maker.R" file in R-Studio then click "Source" in R-Studio.
 
 How do I put in my own data?
 
