@@ -4,7 +4,7 @@ output:
   flexdashboard::flex_dashboard
 ---
 
-Author: Corey Neskey, CISSP | cneskey@protonmail.com | https://github.com/cneskey | https://linkedin.com/in/cneskey | @cneskey
+Tool Developer: Corey Neskey, CISSP | cneskey@protonmail.com | https://github.com/cneskey | https://linkedin.com/in/cneskey | @cneskey | https://cneskey.github.io/unsuR/
 
 ```{r resources, include=FALSE}
 source("main.R", echo = TRUE)
@@ -176,6 +176,17 @@ kable(derp, format = "html", caption = "Scenarios Table") %>%
 ```
 ***
 `r gCommentaryF$Scenarios`
+
+### Inputs
+Input source: `r sheeturl`
+
+```{r Inputs_summary_table}
+options(knitr.kable.NA = '')
+derp <- gSumstats
+kable(derp, format = "html", caption = "Inputs Summary") %>%
+  kable_styling(bootstrap_options = "striped",
+                full_width = T)
+```
 
 ### ECDF {data-commentary-width=200}
 
@@ -458,6 +469,10 @@ Table of Contents to sections here - Todo []
 **Next Steps** 
 
 `r gCommentaryF$'Next Steps'`
+
+**Risk Model Journal**
+```{r ref.label="journal_table"}
+```
 
 **Overview**
 

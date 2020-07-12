@@ -4,6 +4,10 @@ Risk assessment is challenging when data is unavailable, hard to obtain, or cost
 
 To access the demo dashboard, visit [https://cneskey.github.io/unsuR/output/unsuR_Report.html](https://cneskey.github.io/unsuR/output/unsuR_Report.html).
 
+To watch an overview of the code presented at satRdays DC 2020, visit [https://youtu.be/VNy9kmiNP7c](https://youtu.be/VNy9kmiNP7c).
+
+To watch an overview of the code presented at user!2020, Coming Soon, [https://user2020.r-project.org/](https://user2020.r-project.org/).
+
 How do I make this?
 1. Install R Studio [https://rstudio.com/products/rstudio/#rstudio-desktop](https://rstudio.com/products/rstudio/#rstudio-desktop).
 

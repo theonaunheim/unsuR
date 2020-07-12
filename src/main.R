@@ -72,6 +72,7 @@ gEstimates2 <- read_excel("downloaded_temp.xlsx", sheet = "api_stage_2", skip = 
 gScope <- read_excel("downloaded_temp.xlsx", sheet = "Scope", skip = 3)
 gCommentary <- read_excel("downloaded_temp.xlsx", sheet = "Commentary")
 gJournal <- read_excel("downloaded_temp.xlsx", sheet = "Journal")
+gSumstats <- read_excel("downloaded_temp.xlsx", sheet = "sumstats")
 
 # Read commentary sheet contents into memory
 gCommentaryH <- gCommentary$Subsection
