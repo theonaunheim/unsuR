@@ -1,0 +1,23 @@
+packages <- c(
+  "rmarkdown",
+  "flexdashboard",
+  "purrr",
+  "googledrive",
+  "readxl",
+  "plyr",
+  "ggplot2",
+  "scales",
+  "reshape2",
+  "viridis",
+  "httpuv",
+  "ggridges",
+  "readxl",
+  "plotly",
+  "dplyr",
+  "formattable",
+  "stringr",
+  "ggbeeswarm",
+  "kableExtra",
+  "leaflet",
+  "clipr"
+)

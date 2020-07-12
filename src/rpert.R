@@ -1,8 +1,14 @@
-# rpert
-# BetaPERT in R with native R
-# Initially inspired by: https://www.riskamp.com/beta-pert
-# Improved upon based on statistical guidance in:
-# "Risk Analysis - A Quantitative Guide" by David Vose (John Wiley & Sons, 2000).
+#' r betaPERT Function
+#'
+#' This function allows you to sample a Modified Beta PERT distribution.
+#' Initially inspired by: https://www.riskamp.com/beta-pert.
+#' Improved upon based on statistical guidance in:
+#' "Risk Analysis-A Quantitative Guide" by David Vose (John Wiley & Sons, 2000).
+#' @param lambda Confidence/kurtosis modifier. Defaults to 4.
+#' @keywords rpert
+#' @export
+#' @examples
+#' rpert()
 
 rpert <- function( n, x.min, x.max, x.mode, lambda = 4 ){
   if( x.min > x.max || x.mode > x.max || x.mode < x.min ) stop( "invalid parameters" );
