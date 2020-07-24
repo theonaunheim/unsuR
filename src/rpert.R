@@ -5,6 +5,10 @@
 #' Improved upon based on statistical guidance in:
 #' "Risk Analysis-A Quantitative Guide" by David Vose (John Wiley & Sons, 2000).
 #' @param lambda Confidence/kurtosis modifier. Defaults to 4.
+#' @param n 
+#' @param x.min
+#' @param x.max
+#' @param x.mode
 #' @keywords rpert
 #' @export
 #' @examples

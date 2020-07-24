@@ -11,13 +11,7 @@
 #' @keywords monterlo
 #' @export
 #' @examples
-#' cat_function()
-
-
-
-# monterlo
-# Monte carlo simulation framework
-# ref: https://sites.google.com/view/coreyneskey/
+#' monterlo()
 
 monterlo <- function( n_scens, n_perms, prb, mn,ml,mx, out_var){
 

@@ -4,14 +4,10 @@ output:
   flexdashboard::flex_dashboard
 ---
 
-Tool Developer: Corey Neskey, CISSP | cneskey@protonmail.com | https://github.com/cneskey | https://linkedin.com/in/cneskey | @cneskey | https://cneskey.github.io/unsuR/
+Tool Developer: Corey Neskey, CISSP | cneskey@protonmail.com | [github.com/cneskey](https://github.com/cneskey) | [linkedin.com/in/cneskey](https://linkedin.com/in/cneskey) | [twitter.com/cneskey](https://twitter.com/cneskey) | [cneskey.githib.io/unsur](https://cneskey.github.io/unsuR/)
 
 ```{r resources, include=FALSE}
 source("main.R", echo = TRUE)
-
-# If having Pandoc errors you may need to create a file that explicitly tells R where to launch from. This will happen if you have a weird install or are using a virtual workstation etc.
-# Sys.getenv('R_USER')
-# .Renviron file in H:/ and included in it the single entry R_USER=H:/
 ```
 
 Sidebar {.sidebar}
@@ -20,10 +16,10 @@ Sidebar {.sidebar}
 
 `r gCommentaryF$Authors`
 
-`r gCommentaryF$Date`
+`r format(as.Date(as.numeric(gCommentaryF$Date),origin="1900/1/1"), '%B %d, %Y')`
 
 
-### **Exective Summary**
+### **Executive Summary**
 
 ### **Recommendation**
 `r gCommentaryF$Recommendation`
@@ -318,7 +314,7 @@ kable(gJournal,
                 full_width = T)
 ```
 
-Assessment Methodology
+Methodology
 =====================================
 
 **Methodology Criteria**
@@ -455,12 +451,12 @@ After analysis has concluded, conclusions and recommendations may also be commun
 Col2
 -------------------------------------------------------------------------------------
 
-Print Friendly
+Print
 =====================================
 
 Table of Contents to sections here - Todo []
 
-**Exective Summary**
+**Executive Summary**
 
 **Recommendation**
 
