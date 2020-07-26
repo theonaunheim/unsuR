@@ -4,7 +4,7 @@ output:
   flexdashboard::flex_dashboard
 ---
 
-Tool Developer: Corey Neskey, CISSP | cneskey@protonmail.com | [github.com/cneskey](https://github.com/cneskey) | [linkedin.com/in/cneskey](https://linkedin.com/in/cneskey) | [twitter.com/cneskey](https://twitter.com/cneskey) | [cneskey.githib.io/unsur](https://cneskey.github.io/unsuR/)
+Tool Developer: Corey Neskey | cneskey@protonmail.com | [github.com/cneskey](https://github.com/cneskey) | [linkedin.com/in/cneskey](https://linkedin.com/in/cneskey) | [twitter.com/cneskey](https://twitter.com/cneskey) | [cneskey.github.io/unsur](https://cneskey.github.io/unsuR/)
 
 ```{r resources, include=FALSE}
 source("main.R", echo = TRUE)
@@ -26,6 +26,10 @@ Sidebar {.sidebar}
 
 ### **Next Steps** 
 `r gCommentaryF$'Next Steps'`
+
+### *Data*
+
+[Source data](`r sheeturl`) for this particular report
 
 Analysis {.storyboard}
 =====================================
@@ -174,12 +178,18 @@ kable(derp, format = "html", caption = "Scenarios Table") %>%
 `r gCommentaryF$Scenarios`
 
 ### Inputs
-Input source: `r sheeturl`
-
 ```{r Inputs_summary_table}
 options(knitr.kable.NA = '')
 derp <- gSumstats
-kable(derp, format = "html", caption = "Inputs Summary") %>%
+derp$min <- currency(derp$min, digits = 0L)
+derp$avg <- currency(derp$min, digits = 0L)
+derp$`75th ptile` <- currency(derp$min, digits = 0L)
+derp$max <- currency(derp$min, digits = 0L)
+derp$Rng <- currency(derp$min, digits = 0L)
+
+kable(derp,
+      format = "html",
+      caption = "Inputs Summary") %>%
   kable_styling(bootstrap_options = "striped",
                 full_width = T)
 ```
@@ -314,7 +324,7 @@ kable(gJournal,
                 full_width = T)
 ```
 
-Methodology
+Method
 =====================================
 
 **Methodology Criteria**
@@ -456,257 +466,7 @@ Print
 
 Table of Contents to sections here - Todo []
 
-**Executive Summary**
-
-**Recommendation**
-
-`r gCommentaryF$Recommendation`
-
-**Next Steps** 
-
-`r gCommentaryF$'Next Steps'`
-
-**Risk Model Journal**
-```{r ref.label="journal_table"}
-```
-
-**Overview**
-
-```{r ref.label="ECDF_plot"}
-```
-
-
-```{r ref.label="box_plot1"}
-```
-
-***
-
-**Scope**
-
-```{r ref.label="scope_table2"}
-```
-
-***
-
-**Analysis**
-
-**Projection**  The net value after factoring in costs, benefits, losses, and mitigation costs over 1 year, 2 year, and 3 years.
-
-```{r ref.label="line_plot"}
-```
-
-
-`r gCommentaryF$Projection`
-
-**Plan A Expected**
-
-```{r ref.label="plan_a_expected"}
-```
-
-
-**Plan B Expected**
-
-```{r ref.label="plan_b_expected"}
-```
-
-
-**Plan C Expected**
-
-```{r ref.label="plan_c_expected"}
-```
-
-***
-
-**Benefits**  Parameters provided by experts to approximate benefits of this project
-
-```{r ref.label="benefits_table"}
-```
-
-***
-
-**Costs** Parameters provided by experts to approximate the costs of this project.
-
-```{r ref.label="costs_table"}
-```
-
-***
-
-Visualizations of the simulated dataset.
-
-```{r ref.label="ECDF_plot"}
-```
-
-***
-
-```{r ref.label="density_plot"}
-```
-
-***
-
-```{r ref.label="violin_plot"}
-```
-
-***
-
-```{r ref.label="swarm_plot"}
-```
-
-***
-
-```{r ref.label="box_plot"}
-```
-
-***
-
-```{r ref.label="ridge_plot"}
-```
-
-***
-
-*Appendix A: Journal*
-```{r ref.label="journal_table"}
-```
-
-*Appendix B: Scenarios*
-```{r ref.label="Scenarios_table"}
-```
-
-***
-
-*Appendix C: Assessment Methodology*
-
-**Methodology Criteria**
-
-A risk analysis should meet local, city, state, federal, and international compliance criteria and yield a corresponding risk assessment report. The criteria and objective of this analysis is as follows:  
-
-1. To create a list of threats that the entity may become exposed to as a result of the changes presented in discussion with stakeholders.
-2. To communicate the estimated probability and impact of such threats.
-3. To create a list of controls/mitigation strategies that may reduce the probability, impact or uncertainty of the listed threats.
-4. To communicate the measure of how much the probability, impact or uncertainty of the listed threats is modified by the controls/mitigation strategies considered.
-5. To communicate the benefit of controls under consideration and costs associated with them.
-
-
-
-**Methodology Standardization & Interoperability**
-
-The taxonomy chosen is based on Open Group's Factor Analysis of Information Risk (FAIR) standard, an open and independent information risk analysis methodology. This ensures transparency, continuity, and interoperability with other major standards.
-
-
-The Open Group is an industry consortium that facilitates business objectives by developing open, vendor-neutral technology standards and certifications.The Open Group published two Open FAIR standards that form the risk taxonomy followed:
-
-
-- [Open Risk Taxonomy Technical Standard (O-RT)](http://www.opengroup.org/library/C13K). This standard defines a standard taxonomy of terms, definitions, and relationships used in risk analysis.
-
-- [Open Risk Analysis Technical Standard (O-RA)](http://www.opengroup.org/library/C13G). This standard describes process aspects associated with performing effective risk analysis.
-
-
-The [FAIR Institute](https://www.fairinstitute.org) maintains publicly available documentation, resources, community events and other modes of promotion, training, and collaboration.
-
-
-
-**Deviations from Standard**
-
-The methodology used for this assessment deviates from published standards where those standards deviate from scientifically rigorous literature that meets the following criteria:
-
-- Academic Journal (not trade journals),
-- Peer-reviewed,
-- Without conflicts of interest by for-profit entities, and
-- Without conflicts of interest by political entities.
-
-An annotated review of the scientific literature supporting each component of this methodology may be found [here](https://sites.google.com/view/coreyneskey/improving-cybersecurity-decision-making-by-reducing-expert-bias).
-
-
-**Methodology**
-
-Scope definition, estimate parameters and commentary are collected using a format comfortable to most users, a spreadsheet. A [companion spreadsheet](https://docs.google.com/spreadsheets/d/1DWB4rdAmUGggkUN0KtVdtyn6E1gZ9j68QifDD8cn2fY/edit?usp=sharing) is provided with this tool which is interoperable with major spreadsheet rendering software such as Microsoft Office Excel and Google Sheets. The only variable that needs to be entered into this tool is the address or filepath to the [companion spreadsheet](https://docs.google.com/spreadsheets/d/1DWB4rdAmUGggkUN0KtVdtyn6E1gZ9j68QifDD8cn2fY/edit?usp=sharing) containing the scope components, estimate parameters, and desired commentary.
-
-***
-
-![](../imgs/companion_spreadsheet_Google.png)
-
-*[companion spreadsheet](https://docs.google.com/spreadsheets/d/1DWB4rdAmUGggkUN0KtVdtyn6E1gZ9j68QifDD8cn2fY/edit?usp=sharing) opened in Google Sheets.*
-
-***
-
-![](../imgs/companion_spreadsheet_Microsoft.png)
-
-*[companion spreadsheet](https://docs.google.com/spreadsheets/d/1DWB4rdAmUGggkUN0KtVdtyn6E1gZ9j68QifDD8cn2fY/edit?usp=sharing) opened in Microsoft Excel.*
-
-***
-
-Data is collected in the form of interviews, documentation review, and/or receptor-based discovery scanning in order to define the scope of the assessment. Abstractions of the components within scope are categorized into areas: Assets, Containers / Points of Attack, Agent / Threat Communities, Threat Types, and Threat Effects. 
-
-![](../imgs/scope_tab.png)
-
-*NOTICE: Each column is an independent list. i.e. the contents of rows do not relate to each other.*
-
-
-**Scenario Building**
-
-Loss scenarios are generated by exhausting all combinations of the components identified as in scope. Implausible scenarios are removed e.g. non-malicious malware. Scenario components are strung together to form the respective scenario.
-
-![](../imgs/scenarios_table.png)
-
-
-
-**Parameter Definition**
-
-Probability and impact parameters are defined from the integration of data and [calibrated](https://sites.google.com/view/coreyneskey/improving-cybersecurity-decision-making-by-reducing-expert-bias#h.p_UeVP7PfPc-Qp) subject matter experts for each of the loss scenarios. Predefined distribution parameters and/or hyper-parameters of a loss event are used where they are available and credible.
-
-![](../imgs/params_table.png)
-
-
-To take advantage of a person’s natural Bayesian tendencies, [calibration](https://sites.google.com/view/coreyneskey/improving-cybersecurity-decision-making-by-reducing-expert-bias#h.p_UeVP7PfPc-Qp) questions and responses take the form of [frequency formats](https://sites.google.com/view/coreyneskey/improving-cybersecurity-decision-making-by-reducing-expert-bias#h.p_WA7BG-Cgc50Q) instead of percentages or fractions.
-
-[Frequency formats](https://sites.google.com/view/coreyneskey/improving-cybersecurity-decision-making-by-reducing-expert-bias#h.p_WA7BG-Cgc50Q) communicate information to experts in a form that more closely resembles the natural sampling observed in animal foraging and neural networks. What is 1% in standard format would be "1 in 100" in frequency format.
-
-
-
-**Control Planning**
-
-This risk assessment tool facilitates the comparison of different combinations of controls that may reduce the probability, impact, or uncertainty of loss events. The tool calls the first theoretical combination of loss events and controls "Plan-A". Plan-A represents the absence of any controls in order to establish a baseline or "inherent risk". Plan-B is the second combination of controls. This is where analysts may list controls that are in place and additional controls that they are considering implementing. Plan C is where the analyst would enter an alternative set or combination of controls which require comparison.
-
-
-
-![](../imgs/control_planning.png)
-
-After controls have been entered as column headers under "Controls" the check boxes are used to indicate which loss scenarios that control effects.
-
-![](../imgs/control_droids.png)
-
-*e.g. The "Malware scans nightly" control is an applicable control to the Threat Community entries that contain "malicious software".*
-
-
-**Simulation**
-
-[Monte Carlo Simulation](https://sites.google.com/view/coreyneskey/improving-cybersecurity-decision-making-by-reducing-expert-bias#h.p_MF82ugY1c50h) is used to generate a dataset using the parameters provided. The simulations consist of at least 10,000 variations of each loss scenario.
-
-
-
-![](../imgs/monte_carlo_table.png)
-
-
-
-**Analysis**
-
-The resulting approximating dataset is then analyzed using appropriate statistical methodologies.
-
-![](../imgs/analysis_plots_snapshot.png)
-
-
-
-**Reporting / Communication**
-
-Background and scope may be communicated alone or alongside visuals by entering the desired text into the respective sections in the Commentary tab of the spreadsheet.
-
-![](../imgs/commentary_tab.png)
-
-After analysis has concluded, conclusions and recommendations may also be communicated alone or alongside visuals by entering the desired text into the respective sections of the Commentary tab of the companion spreadsheet.
-
-![](../imgs/commentary_tab2.png)
-
-Col2
--------------------------------------------------------------------------------------
+Print friendly contents here - Todo []
 
 Legal
 =====================================

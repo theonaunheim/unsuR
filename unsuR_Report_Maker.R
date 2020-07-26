@@ -11,7 +11,7 @@
   library(pacman)
   p_load(char=packages, install = TRUE, character.only = FALSE)
 
-# Optionally replace the .png logo and icon with your own a you please.
+# Optionally replace the .png logo and icon with your own as you please.
   render(output_dir = "output/",
          "src/unsuR_Report.Rmd",
          flex_dashboard(logo = "../imgs/emblem.png",
