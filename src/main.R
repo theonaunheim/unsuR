@@ -16,11 +16,14 @@ library(ggbeeswarm)
 library(kableExtra)
 library(leaflet)
 library(clipr)
+library(forcats)
+library(readr)
+library(DT)
 
 # Load source into memory
 source("rpert.R")
 source("monterlo.R")
-source("QRAR_Combos_v2-Paste.R")
+source("combos.R")
 
 
 email <- rstudioapi::showPrompt(
@@ -78,7 +81,6 @@ gCommentaryH <- gCommentary$Subsection
 gCommentaryF <- t(gCommentary$Commentary)
 colnames(gCommentaryF) <- gCommentaryH
 gCommentaryF <- as.data.frame(gCommentaryF)
-# gJournalF <- as.data.frame(gJournal)
 
 # Define unique identifier variables
 n_scens = length(na.omit(gEstimates$`UID`))
@@ -529,7 +531,6 @@ colnames(Plan_B_Expected) <- c("Year 1", "Year 2","Year 3")
 row.names(Plan_C_Expected) <- c("Benefits","Costs","Loss","Mitigation Costs","Prevented Loss","Net")
 colnames(Plan_C_Expected) <- c("Year 1", "Year 2","Year 3")
 
-
 #Data Prep for visualisations
 # Density Plot 1
 df <- t(risk_mean)
@@ -555,6 +556,24 @@ mu3 <- ddply(df.m3, "ben_name", summarise, grp.mean=mean(ben_amt))
 df.m3$ben_name <- factor(df.m3$ben_name)
 mu3$cost_name <- factor(mu3$ben_name)
 
+# Density Plot 4A (per risk) @@@
+df4A <- t(sim_output_A)
+df.m4A <- melt(df4A)
+colnames(df.m4A) <- as.character(c("risk","iter","loss"))
+mu4A <- ddply(df.m4A, "risk", summarise, grp.mean=mean(loss))
+
+# Density Plot 4B (per risk) @@@
+df4B <- t(sim_output_B)
+df.m4B <- melt(df4B)
+colnames(df.m4B) <- as.character(c("risk","iter","loss"))
+mu4B <- ddply(df.m4B, "risk", summarise, grp.mean=mean(loss))
+
+# Density Plot C (per risk) @@@
+df4C <- t(sim_output_C)
+df.m4C <- melt(df4C)
+colnames(df.m4C) <- as.character(c("risk","iter","loss"))
+mu4C <- ddply(df.m4C, "risk", summarise, grp.mean=mean(loss))
+
 # For per plan ECDF
 loss_ecdf <- ddply(df.m, c("plan"), mutate, ecdf = ecdf(loss)(unique(loss))*length(loss))
 # To invert the per plan ECDF
@@ -570,3 +589,7 @@ colnames(Netsm) <- c("Year", "Plan", "Net", "Sign")
 
 # Define headers of "Scope" sheet.
 colnames(gScope) <- c("Included","Excluded","Included","Excluded","Included","Excluded","Included","Excluded","Included","Excluded")
+
+# Output a sheet of my risks, estimates, and sim outputs per risk
+ests_plus_simouts <- cbind(gEstimates,risk_mean)
+write_csv(ests_plus_simouts, "../output/ests_and_means.csv")

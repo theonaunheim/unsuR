@@ -19,5 +19,8 @@ packages <- c(
   "ggbeeswarm",
   "kableExtra",
   "leaflet",
-  "clipr"
+  "clipr",
+  "forcats",
+  "reader",
+  "DT"
 )

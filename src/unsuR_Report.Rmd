@@ -57,6 +57,7 @@ ecdf_gg <- ggplot(derp,  mapping = aes(x = loss, y = `probability of exceeding`,
 ggplotly(ecdf_gg)
 ```
 
+
 ***
 
 ```{r box_plot1}
@@ -64,6 +65,7 @@ ggplotly(ecdf_gg)
 boxplot_gg <- ggplot(data = df.m, aes(x=plan, y=loss)) +
   geom_boxplot(outlier.colour = "black", outlier.shape = 1,
                color=c("#4b0082","lightseagreen","gold")) +
+  stat_summary(fun=mean, geom = "point", color="red")+
   labs(
     title="Simulated Loss Output",
     subtitle = "Over a 12 month period",
@@ -177,7 +179,18 @@ kable(derp, format = "html", caption = "Scenarios Table") %>%
 ***
 `r gCommentaryF$Scenarios`
 
-### Inputs
+### Expected Loss Per Scenario {data-commentary-width=200}
+```{r ELPS_Scenarios_table}
+options(knitr.kable.NA = '')
+derp <- cbind(as_tibble(c(gEstimates[,1:7],ests_plus_simouts[,41:43])))
+derp <- datatable(derp,filter = 'top')
+derp <- formatCurrency(derp,c("PLAN-A","PLAN-B","PLAN-C"))
+derp
+
+```
+
+
+### Inputs Summary
 ```{r Inputs_summary_table}
 options(knitr.kable.NA = '')
 derp <- gSumstats
@@ -225,6 +238,7 @@ ggplotly(density_gg)
 ```
 
 ***
+
 `r gCommentaryF$Density`
 
 ### Violin {data-commentary-width=200}
@@ -232,6 +246,7 @@ ggplotly(density_gg)
 ```{r violin_plot}
 violin_gg <- ggplot(data = df.m, aes(x=plan, y=loss)) +
   geom_violin(aes(fill = factor(plan))) +
+  stat_summary(fun=mean, geom = "point", color="red")+
   labs(
     title="Simulated Loss Output",
     subtitle = "Over a 12 month period",
@@ -272,6 +287,7 @@ ggplotly(swarm_gg)
 ```{r box_plot}
 hbox_gg <- ggplot(data = df.m, aes(x=plan, y=loss)) +
   geom_boxplot(outlier.colour = "black", outlier.shape = 1, color=c("#4b0082","lightseagreen","gold")) +
+  stat_summary(fun=mean, geom = "point", color="red")+
   labs(
     title="Simulated Loss Output",
     subtitle = "Over a 12 month period",
@@ -287,8 +303,11 @@ ggplotly(hbox_gg)
 ***
 `r gCommentaryF$Box`
 
+***
 
-### Ridge {data-commentary-width=200}
+### Ridge {data-commentary-width=650} 
+
+`r gCommentaryF$Ridge`
 
 ```{r ridge_plot}
 ridge_gg <- ggplot(df.m, aes(x=loss, y=plan, fill=plan)) +
@@ -309,8 +328,83 @@ ridge_gg <- ggplot(df.m, aes(x=loss, y=plan, fill=plan)) +
 ridge_gg
 ```
 
-***
-`r gCommentaryF$Ridge`
+
+Risk Explorer {.storyboard}
+=====================================
+
+### Plan A {data-commentary-width=650}
+
+```{r Viol_plotA}
+PerRiskViol_plotA <- ggplot(data = df.m4A,
+                            aes(x=fct_reorder(risk, loss, .fun = mean),
+                                y=loss,
+                                fill = fct_reorder(risk, loss, .fun = mean),
+                                )) +
+  geom_violin() +
+  stat_summary(fun=mean, geom = "point", color="red")+
+  labs(
+    title="Simulated Loss Output - Plan A",
+    subtitle = "Over a 12 month period",
+    x = "Risk Scenario",
+    y = "Loss") +
+  scale_y_continuous(labels = dollar_format())+
+  scale_fill_viridis(discrete=TRUE)+
+  scale_color_viridis(discrete=TRUE)+
+  coord_flip()+
+  theme_classic()+
+  theme(legend.position = 'none')
+ggplotly(PerRiskViol_plotA)
+```
+
+### Plan B {data-commentary-width=650}
+
+
+```{r viol_plotB}
+PerRiskViol_plotB <- ggplot(data = df.m4B,
+                            aes(x=fct_reorder(risk, loss, .fun = mean),
+                                y=loss,
+                                fill = fct_reorder(risk, loss, .fun = mean),
+                                )) +
+  geom_violin() +
+  stat_summary(fun=mean, geom = "point", color="red")+
+  labs(
+    title="Simulated Loss Output - Plan B",
+    subtitle = "Over a 12 month period",
+    x = "Risk Scenario",
+    y = "Loss") +
+  scale_y_continuous(labels = dollar_format())+
+  scale_fill_viridis(discrete=TRUE)+
+  scale_color_viridis(discrete=TRUE)+
+  coord_flip()+
+  theme_classic()+
+  theme(legend.position = 'none')
+ggplotly(PerRiskViol_plotB)
+```
+
+### Plan C {data-commentary-width=650}
+
+```{r viol_plotC}
+PerRiskViol_plotC <- ggplot(data = df.m4C,
+                            aes(x=fct_reorder(risk, loss, .fun = mean),
+                                y=loss,
+                                fill = fct_reorder(risk, loss, .fun = mean),
+                                )) +
+  geom_violin() +
+  stat_summary(fun=mean, geom = "point", color="red")+
+  labs(
+    title="Simulated Loss Output - Plan C",
+    subtitle = "Over a 12 month period",
+    x = "Risk Scenario",
+    y = "Loss") +
+  scale_y_continuous(labels = dollar_format())+
+  scale_fill_viridis(discrete=TRUE)+
+  scale_color_viridis(discrete=TRUE)+
+  coord_flip()+
+  theme_classic()+
+  theme(legend.position = 'none')
+ggplotly(PerRiskViol_plotC)
+```
+
 
 Journal
 =====================================
