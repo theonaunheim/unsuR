@@ -26,23 +26,11 @@ source("monterlo.R")
 source("combos.R")
 
 
-email <- rstudioapi::showPrompt(
-  title = 'Google account to use',
-  message = 'Enter your email address.',
-  default = "cneskey@gmail.com")
+email <- "DUMMY_STRING"
 
-sheeturl <- rstudioapi::showPrompt(
-  title = 'Google sheet location',
-  message = 'Enter the URL to your google sheet.',
-  default = "https://docs.google.com/spreadsheets/d/1DWB4rdAmUGggkUN0KtVdtyn6E1gZ9j68QifDD8cn2fY/edit#gid=2113505539")
+sheeturl <- "DUMMY_STRING"
 
-scen_gen <- askYesNo(
-  msg = 'Do you want to generate new scenarios based on your entries in the Scope sheet?
-  
-This will be copied to your clipboard so that you can paste them into the Scenarios sheet.',
-  default = FALSE,
-  prompts = getOption("askYesNo",
-                      gettext(c("Yes", "No", "Cancel"))))
+scen_gen <- FALSE
 
 simsnum <- rstudioapi::showPrompt(
   title = 'Simulations quantity',
@@ -56,17 +44,8 @@ set.seed(3141593)
 # Set number of simulation variations (at least 10,000 recommended).
 n_perms = simsnum
 
-# Specify Google account and path to spreadsheet.
-drive_auth(email = email)
-drive_user()
-sheet_path <- sheeturl
-gsheet_name <- drive_get(sheet_path)
-
 # Generate combos and load into clipboard (if user answered "Yes")
-if(scen_gen) combos(sheeturl)
-
-# Download the sheet as 'download_temp', overwrite if present.
-drive_download(gsheet_name, path = "downloaded_temp", overwrite = TRUE)
+if(scen_gen) combos()
 
 # Read the data sheets into memory.
 gEstimates <- read_excel("downloaded_temp.xlsx", sheet = "api_stage", skip = 10)

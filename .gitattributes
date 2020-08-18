@@ -1,0 +1,3 @@
+# Linguist vendoring for Github code composition bar
+output/* linguist-vendored
+imgs/* linguist-vendored

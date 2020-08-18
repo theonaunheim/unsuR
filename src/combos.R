@@ -7,16 +7,13 @@
 #' @examples
 #' combos()
 
-combos <- function(sheeturl) {
+combos <- function() {
   library(purrr)
   library(googledrive)
   library(readxl)
   library(clipr)
   
-  # Download data
-  fp <- sheeturl
-  scope_components <- (gsheet_name <- drive_get(fp))
-  drive_download(scope_components, path = "downloaded_temp", overwrite = TRUE)
+  # Google workaround
   gScope <- read_excel("downloaded_temp.xlsx", sheet = "Scope", skip = 3)
   
   # Remove "excluded"

@@ -5,6 +5,10 @@
 # Set the working directory to wherever this .R file is.
   setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
 
+  file.copy("./QRSMv1 ServerGauge RA 2020.xlsx", 
+            "./src/downloaded_temp.xlsx",
+            overwrite=TRUE)
+
 # Install/Load package manager pacman then others.
   if (!require("pacman")) install.packages("pacman")
   source("src/packs.R")
